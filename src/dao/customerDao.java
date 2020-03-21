@@ -1,6 +1,7 @@
 package dao;
 
-import dbutil.dbConnection;
+import dbutil.DBConnection;
+
 import pojo.Customer;
 
 import java.sql.ResultSet;
@@ -12,7 +13,7 @@ public class customerDao {
 
 
             public static ArrayList<Customer> getAllCustomerDetails() throws SQLException {
-                Statement st = dbConnection.getConnection().createStatement();
+                Statement st = DBConnection.getConnection().createStatement();
                 String qry = "select * from customer";
                 ResultSet rs = st.executeQuery(qry);
                 ArrayList<Customer> customer = new ArrayList<>();

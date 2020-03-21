@@ -1,6 +1,7 @@
 package dao;
 
-import dbutil.dbConnection;
+import dbutil.DBConnection;
+
 import pojo.billPojo;
 
 import java.sql.PreparedStatement;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 public class billDao {
     public static ArrayList<billPojo> getBills(String name, String email) throws SQLException {
-        PreparedStatement pst = dbConnection.getConnection().prepareStatement(" select DISTINCT(Bill_No),Doctor,Date from bill where Customer=? and Email=?");
+        PreparedStatement pst = DBConnection.getConnection().prepareStatement(" select DISTINCT(Bill_No),Doctor,Date from bill where Customer=? and Email=?");
         pst.setString(1,name);
         pst.setString(2,email);
         ResultSet rs = pst.executeQuery();
@@ -27,12 +28,12 @@ public class billDao {
     }
 
     public static ArrayList<billPojo> getBillDetails(String billNo) throws SQLException {
-         PreparedStatement pst = dbConnection.getConnection().prepareStatement("select Medicine_Name,Category,Batch_No from bill where Bill_No=?");
+         PreparedStatement pst = DBConnection.getConnection().prepareStatement("select Medicine_Name,Category,Batch_No from bill where Bill_No=?");
          pst.setString(1,billNo);
          ResultSet rs = pst.executeQuery();
          ArrayList<billPojo> a = new ArrayList<>();
          while(rs.next()){
-             PreparedStatement ps = dbConnection.getConnection().prepareStatement("select Expiry from Medicine where Name=? and Category=? and Batch_No=?");
+             PreparedStatement ps = DBConnection.getConnection().prepareStatement("select Expiry from Medicine where Name=? and Category=? and Batch_No=?");
              ps.setString(1,rs.getString(1));
              ps.setString(2,rs.getString(2));
              ps.setString(3,rs.getString(3));
@@ -51,7 +52,7 @@ public class billDao {
     }
 
     public static String getBillNo() throws SQLException {
-        Statement s = dbConnection.getConnection().createStatement();
+        Statement s = DBConnection.getConnection().createStatement();
         String qry = "select max(Bill_No) from bill";
         ResultSet rs = s.executeQuery(qry);
         if(rs.next()){
@@ -63,7 +64,7 @@ public class billDao {
     }
 
     public static String getDATE() throws SQLException {
-        Statement s = dbConnection.getConnection().createStatement();
+        Statement s = DBConnection.getConnection().createStatement();
         String qry = "select CURDATE()";
         ResultSet rs = s.executeQuery(qry);
         System.out.println(rs);
