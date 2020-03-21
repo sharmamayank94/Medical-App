@@ -1,26 +1,35 @@
 package gui;
 
+import dao.ProductsDao;
+import pojo.ProductPojo;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.Calendar;
 
 public class AddMedicines {
+    private JTextField nameTextField;
     private JPanel addmedicines;
-    private JTextField textField1;
-    private JTextField textField3;
-    private JTextField textField4;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JComboBox comboBox1;
-    private JTextField onlyThoseNotIncludedTextField;
-    private JTextField textField2;
-    private JTextField textField7;
-    private JTextField textField8;
-    private JTextField textField9;
-    private JTextField textField10;
-    private JTextField textField11;
+    private JTextField productNameTextField;
+    private JTextField leavesPerPackTextField;
+    private JTextField noOfPacksTextField;
+    private JTextField medicinesPerLeafTextField;
+    private JTextField batchNoTextField;
+
+    private JComboBox categoryComboBox;
+    private JTextField noOfMedicinesTextField;
+    private JTextField compositionTextField;
+    private JTextField vendorTextField;
+    private JTextField companyTextField;
+    private JTextField expiryTextField;
+    private JTextField costPriceTextField;
+    private JTextField sellingPriceTextField;
+    private JTextField MRPTextField;
     private JScrollPane ProductDescription;
-    private JTextPane textPane1;
+    private JTextPane productDescriptionTextPane;
     private JButton homeButton;
     private JButton logoutButton;
     private JLabel addproduct;
@@ -29,15 +38,90 @@ public class AddMedicines {
 
     private   JScrollPane scroller;
     AddMedicines(){
-
-
-        ProductDescription.setViewportView(textPane1);
-        ImageIcon imageIcon = new ImageIcon("src/gui/addproducts.png"); // load the image to a imageIcon
+        categoryComboBox.addItem("Tablets");
+        categoryComboBox.addItem("Syrup");
+        categoryComboBox.addItem("Syringe");
+        categoryComboBox.addItem("Sanitizer");
+        ProductDescription.setViewportView(productDescriptionTextPane);
+        ImageIcon imageIcon = new ImageIcon("src/gui/Images/addproducts.png"); // load the image to a imageIcon
         Image image = imageIcon.getImage(); // transform it
         Image newimg = image.getScaledInstance(500, 460,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         imageIcon = new ImageIcon(newimg);  // transform it back
         addproduct.setIcon(imageIcon);
 
+        addProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                String name = nameTextField.getText();
+                String noOfPacks = noOfPacksTextField.getText();
+                String leavesPerPack = leavesPerPackTextField.getText();
+                String medicinesPerLeaf = medicinesPerLeafTextField.getText();
+                String category = categoryComboBox.getSelectedItem().toString();
+                String sellingPrice = sellingPriceTextField.getText();
+                String costPrice = costPriceTextField.getText();
+                String MRP = MRPTextField.getText();
+                String batchNo =  batchNoTextField.getText();
+                String vendor = vendorTextField.getText();
+                String company =  companyTextField.getText();
+                String expiryString =  expiryTextField.getText();
+                String productDescription = productDescriptionTextPane.getText();
+
+                if(name.isEmpty()||category.isEmpty()||sellingPrice.isEmpty()||batchNo.isEmpty()||
+                expiryString.isEmpty()||vendor.isEmpty()||company.isEmpty()||productDescription.isEmpty()||
+                MRP.isEmpty()||costPrice.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Please fill all the necessary details");
+                    return;
+                }
+
+                Calendar expiry = Calendar.getInstance();
+                expiry.set(Integer.parseInt(expiryString.substring(6)),
+                        Integer.parseInt(expiryString.substring(3,5))-1,
+                        Integer.parseInt(expiryString.substring(0,2)));
+
+                int leftMedicines;
+                try{
+                    leftMedicines = Integer.parseInt(noOfMedicinesTextField.getText());
+                }catch(NumberFormatException nfe){
+                    leftMedicines = 0;
+                    System.out.println("here");
+                }
+
+                if(noOfPacks.isEmpty())
+                    noOfPacks="0";
+
+                if(leavesPerPack.isEmpty())
+                    leavesPerPack="0";
+
+                if(medicinesPerLeaf.isEmpty())
+                    medicinesPerLeaf = "0";
+
+
+                int quantity = Integer.parseInt(noOfPacks)*Integer.parseInt(leavesPerPack)
+                        * Integer.parseInt(medicinesPerLeaf) + leftMedicines;
+
+                ProductPojo product = new ProductPojo(name, category,
+                        quantity, Double.parseDouble(sellingPrice), Double.parseDouble(costPrice),
+                        Double.parseDouble(MRP), batchNo, expiry, vendor,
+                        company, Integer.parseInt(leavesPerPack), Integer.parseInt(medicinesPerLeaf),
+                        productDescription);
+
+                if(!compositionTextField.getText().isEmpty()){
+                    product.setComposition(compositionTextField.getText());
+                }
+
+                try{
+                   boolean result =  ProductsDao.addProduct(product);
+                   if(result){
+                       JOptionPane.showMessageDialog(null, "Product added to the Database");
+                   }
+                }catch(SQLException sqle){
+                    JOptionPane.showMessageDialog(null, "Problem in Database");
+                    sqle.printStackTrace();
+                }
+
+            }
+        });
     }
 
     public static void main(String[] args) {
@@ -60,6 +144,8 @@ public class AddMedicines {
     }
 
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
 
-
+    }
 }

@@ -13,7 +13,7 @@ public class LoginPanel {
     private JLabel LoginImage;
     private JPanel gradpanel;
    LoginPanel(){
-        ImageIcon img = new ImageIcon("src/gui/LoginImage.png");
+        ImageIcon img = new ImageIcon("src/gui/Images/LoginImage.png");
 
         Image image = img.getImage();
         Image resized = image.getScaledInstance(200, 200, Image.SCALE_SMOOTH);

@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="addmedicines" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="20" bottom="20" right="20"/>
     <constraints>
-      <xy x="20" y="20" width="930" height="612"/>
+      <xy x="20" y="-4" width="930" height="979"/>
     </constraints>
     <properties>
       <autoscrolls value="false"/>
@@ -27,7 +27,7 @@
           </grid>
         </constraints>
         <properties>
-          <background color="-13420614"/>
+          <background color="-9692189"/>
           <foreground color="-1"/>
           <opaque value="true"/>
         </properties>
@@ -73,7 +73,7 @@
           </component>
         </children>
       </grid>
-      <grid id="56489" layout-manager="GridLayoutManager" row-count="8" column-count="2" same-size-horizontally="true" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="56489" layout-manager="GridLayoutManager" row-count="9" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -108,7 +108,7 @@
               <text value="Category"/>
             </properties>
           </component>
-          <component id="8c115" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+          <component id="8c115" class="javax.swing.JTextField" binding="nameTextField">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -127,7 +127,7 @@
               <text value="Batch Number"/>
             </properties>
           </component>
-          <component id="b5949" class="javax.swing.JTextField" binding="textField6" default-binding="true">
+          <component id="b5949" class="javax.swing.JTextField" binding="batchNoTextField">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -137,7 +137,7 @@
           </component>
           <component id="3daa4" class="javax.swing.JLabel">
             <constraints>
-              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="235" height="16"/>
               </grid>
             </constraints>
@@ -190,13 +190,13 @@
               <text value="MRP"/>
             </properties>
           </component>
-          <component id="12ea4" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+          <component id="12ea4" class="javax.swing.JComboBox" binding="categoryComboBox">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
           </component>
-          <component id="7de3d" class="javax.swing.JTextField" binding="textField7" default-binding="true">
+          <component id="7de3d" class="javax.swing.JTextField" binding="expiryTextField">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -204,7 +204,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="15715" class="javax.swing.JTextField" binding="textField8" default-binding="true">
+          <component id="15715" class="javax.swing.JTextField" binding="costPriceTextField">
             <constraints>
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -212,7 +212,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="63013" class="javax.swing.JTextField" binding="textField9" default-binding="true">
+          <component id="63013" class="javax.swing.JTextField" binding="sellingPriceTextField">
             <constraints>
               <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -220,7 +220,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="22ded" class="javax.swing.JTextField" binding="textField10" default-binding="true">
+          <component id="22ded" class="javax.swing.JTextField" binding="MRPTextField">
             <constraints>
               <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -228,13 +228,30 @@
             </constraints>
             <properties/>
           </component>
-          <component id="10ae6" class="javax.swing.JTextField" binding="textField11" default-binding="true">
+          <component id="10ae6" class="javax.swing.JTextField" binding="companyTextField">
+            <constraints>
+              <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="20c85" class="javax.swing.JTextField" binding="vendorTextField">
             <constraints>
               <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
             <properties/>
+          </component>
+          <component id="e556b" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <text value="Vendor"/>
+            </properties>
           </component>
         </children>
       </grid>
@@ -280,7 +297,7 @@
               <text value="Medicines per Leaf"/>
             </properties>
           </component>
-          <component id="97ccb" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+          <component id="97ccb" class="javax.swing.JTextField" binding="leavesPerPackTextField">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -290,7 +307,7 @@
               <text value=""/>
             </properties>
           </component>
-          <component id="ab032" class="javax.swing.JTextField" binding="textField4" default-binding="true">
+          <component id="ab032" class="javax.swing.JTextField" binding="noOfPacksTextField">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -298,7 +315,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="dbeb8" class="javax.swing.JTextField" binding="textField5" default-binding="true">
+          <component id="dbeb8" class="javax.swing.JTextField" binding="medicinesPerLeafTextField">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -324,7 +341,7 @@
               <text value="Number of medicines "/>
             </properties>
           </component>
-          <component id="d8137" class="javax.swing.JTextField" binding="onlyThoseNotIncludedTextField" default-binding="true">
+          <component id="d8137" class="javax.swing.JTextField" binding="noOfMedicinesTextField">
             <constraints>
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -346,7 +363,7 @@
           <text value="Composition"/>
         </properties>
       </component>
-      <component id="e98fc" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+      <component id="e98fc" class="javax.swing.JTextField" binding="compositionTextField">
         <constraints>
           <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -362,7 +379,7 @@
         <border type="none" title="Description of Medicine"/>
         <children/>
       </scrollpane>
-      <component id="554ce" class="javax.swing.JTextPane" binding="textPane1" default-binding="true">
+      <component id="554ce" class="javax.swing.JTextPane" binding="productDescriptionTextPane">
         <constraints>
           <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="2" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
