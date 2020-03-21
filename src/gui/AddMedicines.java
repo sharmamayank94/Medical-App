@@ -12,6 +12,8 @@ public class AddMedicines {
     private JTextField textField6;
     private JTextArea textArea1;
 
+
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Add Medicines");
         frame.setContentPane(new AddMedicines().addmedicines);
