@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.AddMedicines">
-  <grid id="27dc6" binding="addmedicines" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="mainpanel" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="20" bottom="20" right="20"/>
     <constraints>
       <xy x="20" y="-4" width="930" height="979"/>
@@ -45,7 +45,7 @@
               <foreground color="-1"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="10"/>
-              <text value="Add Products"/>
+              <text value="ADD PRODUCTS"/>
             </properties>
           </component>
           <component id="12b14" class="javax.swing.JButton" binding="logoutButton" default-binding="true">
@@ -267,7 +267,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="2bd6" class="javax.swing.JLabel">
+          <component id="2bd6" class="javax.swing.JLabel" binding="leavesPerPackLabel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -277,7 +277,7 @@
               <text value="Leaves per Pack"/>
             </properties>
           </component>
-          <component id="39459" class="javax.swing.JLabel">
+          <component id="39459" class="javax.swing.JLabel" binding="noOfPacksLabel">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -287,7 +287,7 @@
               <text value="No. of Packs"/>
             </properties>
           </component>
-          <component id="5ab76" class="javax.swing.JLabel">
+          <component id="5ab76" class="javax.swing.JLabel" binding="medicinesPerLeafLabel">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -323,7 +323,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="87bc4" class="javax.swing.JLabel">
+          <component id="87bc4" class="javax.swing.JLabel" binding="andLabel">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -356,7 +356,7 @@
       </grid>
       <component id="6ca84" class="javax.swing.JLabel">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font size="14"/>
@@ -365,7 +365,7 @@
       </component>
       <component id="e98fc" class="javax.swing.JTextField" binding="compositionTextField">
         <constraints>
-          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
@@ -373,7 +373,7 @@
       </component>
       <scrollpane id="9f47e" binding="ProductDescription">
         <constraints>
-          <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none" title="Description of Medicine"/>
@@ -381,7 +381,7 @@
       </scrollpane>
       <component id="554ce" class="javax.swing.JTextPane" binding="productDescriptionTextPane">
         <constraints>
-          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="2" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+          <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="2" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
           </grid>
         </constraints>
@@ -389,7 +389,7 @@
       </component>
       <component id="ddaed" class="javax.swing.JButton" binding="addProductButton" default-binding="true">
         <constraints>
-          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Add Product"/>
@@ -397,10 +397,27 @@
       </component>
       <component id="34bd2" class="javax.swing.JLabel" binding="addproduct">
         <constraints>
-          <grid row="1" column="0" row-span="6" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="2" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value=" "/>
+        </properties>
+      </component>
+      <component id="991f9" class="javax.swing.JTextField" binding="taxTextField">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="e2890" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font size="14"/>
+          <text value="GST"/>
         </properties>
       </component>
     </children>

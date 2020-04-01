@@ -97,6 +97,15 @@ public class OrdersDao {
         return true;
     }
 
+    public static boolean updateOrderStatus(String orderId, String status, String name) throws SQLException{
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement("Update orders set Status = ? where OrderId = ? and Name=?");
+        ps.setString(1, status);
+        ps.setString(2, orderId);
+        ps.setString(3, name);
+        int result = ps.executeUpdate();
+        return result>0;
+    }
+
     public static ArrayList<OrderPojo> getOrders() throws SQLException{
         ArrayList<OrderPojo> order = new ArrayList<>();
         Connection conn = DBConnection.getConnection();

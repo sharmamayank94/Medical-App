@@ -1,6 +1,6 @@
 package gui;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
+
 import dao.OrdersDao;
 import pojo.OrderPojo;
 
@@ -47,7 +47,8 @@ public class MyOrders {
             e.printStackTrace();
         }
 
-        addAllOrders();
+        if(!orderList.isEmpty())
+            addAllOrders();
 
 
 
@@ -126,7 +127,25 @@ public class MyOrders {
     }
 
     private void addOrderToTable(ArrayList<OrderPojo> order) {
+        String status="";
+        for(OrderPojo med: order){
+            if(med.getStatus().equals("Pending")){
+                status = "Pending";
+                break;
+            }
+            else if(med.getStatus().equals("Delivered/Stock not updated")){
+                status = "Delivered/Stock not updated";
+                break;
+            }
+            else if(med.getStatus().equals("Unordered")){
+                status = "Unordered";
+                break;
+            }
+            else if(med.getStatus().equals("Delivered")){
+                status = "Delivered";
+            }
 
+        }
         String name = "<html>", company="<html>";
         for(OrderPojo med: order){
             name+=med.getName()+"<br/>";
@@ -145,8 +164,9 @@ public class MyOrders {
             dateOfOrderCompletion = null;
         }
 
+        dtm.addRow(new Object[]{order.get(0).getOrderId(), name, "43", company, order.get(0).getVendor(), dateOfOrder,
+                status, dateOfOrderCompletion, ""});
 
-        dtm.addRow(new Object[]{order.get(0).getOrderId(), name, "43", company, order.get(0).getVendor(), dateOfOrder, order.get(0).getStatus(), dateOfOrderCompletion, ""});
         int count = name.split("<br/>").length;
         table1.setRowHeight(dtm.getRowCount()-1, count*30);
 
@@ -192,8 +212,10 @@ public class MyOrders {
 
                 }
 
-                else if(value.toString().equals("Completed"))
+                else if(value.toString().equals("Delivered"))
                     mycomp.setBackground(Color.GREEN);
+
+                else mycomp.setBackground(Color.cyan);
                 return mycomp;
             }
         };

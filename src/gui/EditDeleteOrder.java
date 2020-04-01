@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+
 public class EditDeleteOrder {
     private JTable table1;
     private JPanel mainpanel;
@@ -34,11 +35,15 @@ public class EditDeleteOrder {
     private DefaultTableModel dtm;
     private boolean isOpen;
     private JFrame frame;
+    private  String status ;
+    private  ArrayList<OrderPojo> order;
 
+    //Constructor to initialize order id and to add medicines(rows) to table after getting order using order dao
     public EditDeleteOrder(String orderId){
         this.orderId = orderId;
         try {
-            ArrayList<OrderPojo> order = OrdersDao.getOrder(orderId);
+           order  = OrdersDao.getOrder(orderId);
+
             for(OrderPojo med: order){
                 Object[] row = new Object[5];
                 row[0] = med.getName();
@@ -51,29 +56,28 @@ public class EditDeleteOrder {
                 dtm.addRow(row);
             }
 
+            if(order.get(0).getStatus().equals("Delivered")){
+                updateButton.setEnabled(false);
+                deleteSelectedRowButton.setEnabled(false);
+                addRowButton.setEnabled(false);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        //Updating order
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                ArrayList<OrderPojo> order = new ArrayList<>();
-                for(int i=0; i<dtm.getRowCount(); i++){
-                    Calendar dateOfOrder = Calendar.getInstance();
-                    String tempDate = dtm.getValueAt(i, 4).toString();
-                    dateOfOrder.set(Integer.parseInt(tempDate.substring(6)), Integer.parseInt(tempDate.substring(3,5))-1, Integer.parseInt(tempDate.substring(0,2)));
-
-
-                    OrderPojo med = new OrderPojo(orderId, dtm.getValueAt(i, 0).toString(),
-                            Integer.parseInt(dtm.getValueAt(i, 1).toString()),
-                            dtm.getValueAt(i, 2).toString(), dtm.getValueAt(i, 3).toString(),
-                            "Pending", dateOfOrder, null);
-
-
-                    order.add(med);
+                String status="Unordered";
+                if(order.get(0).getStatus().equals("Pending")){
+                   status  = "Pending";
                 }
+                ArrayList<OrderPojo> orderupdated = tableToOrder(status);
+
                 try {
-                    boolean result = OrdersDao.updateOrder(order);
+                    boolean result = OrdersDao.updateOrder(orderupdated);
                     isOpen = false;
                     frame.dispose();
 
@@ -100,6 +104,7 @@ public class EditDeleteOrder {
                 }
             }
         });
+
         addRowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -109,10 +114,88 @@ public class EditDeleteOrder {
                 dtm.addRow(new Object[] {nameTextField.getText(), quantityTextField.getText(), companyTextField.getText(), vendorTextField.getText(), todayDate});
             }
         });
+
         deleteSelectedRowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                dtm.removeRow(table1.getSelectedRow());
+            }
+        });
+
+        orderDevliveredButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int response =  JOptionPane.showConfirmDialog(null,
+                        "Do you wish to add medicines to stock now?");
+
+
+
+                if(response==1 && order.get(0).getStatus().equals("Pending")){
+                    status = "Delivered/Stock not updated";
+
+                    for(OrderPojo med: order){
+                        try {
+                            OrdersDao.updateOrderStatus(orderId, status, med.getName());
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                else if(response==0){
+                    status = "Delivered/Stock not updated";
+
+                    AddMedicines am = new AddMedicines();
+                    am.make();
+
+
+                        Thread t = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for(OrderPojo med: order){
+                                    if(med.getStatus().equals("Delivered")) continue;
+
+                                    System.out.println(med.getName()+med.getStatus());
+                                    String nameOfProduct = med.getName();
+                                    String quantity = med.getQuantity()+"";
+                                    String vendor = med.getVendor();
+                                    String company = med.getCompany();
+
+                                    am.setEntries(nameOfProduct, quantity, vendor, company);
+
+                                    while(!am.getisProductAdded()) {
+                                        try {
+                                            Thread.sleep(500);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    if(am.getisProductAdded()){
+                                        try{
+                                            System.out.println("hey hey ");
+                                             boolean result = OrdersDao.updateOrderStatus(orderId, "Delivered", med.getName());
+                                             med.setStatus("Delivered");
+                                             if(result==true){
+                                                 System.out.println("updated");
+                                             }
+                                        }catch(SQLException sqle){
+                                            sqle.printStackTrace();
+                                        }
+
+                                        am.setisProductAdded(false);
+                                    }
+                                }
+                            }
+                        });
+                        t.start();
+
+
+
+                }else return;
+
+
             }
         });
     }
@@ -147,5 +230,28 @@ public class EditDeleteOrder {
 
     public boolean isOpen() {
         return this.isOpen;
+    }
+
+    private ArrayList<OrderPojo> tableToOrder(String status){
+
+        ArrayList<OrderPojo> order = new ArrayList<>();
+        for(int i=0; i<dtm.getRowCount(); i++){
+
+            Calendar dateOfOrder = Calendar.getInstance();
+            String tempDate = dtm.getValueAt(i, 4).toString();
+
+            dateOfOrder.set(Integer.parseInt(tempDate.substring(6)), Integer.parseInt(tempDate.substring(3,5))-1,
+                    Integer.parseInt(tempDate.substring(0,2)));
+
+
+            OrderPojo med = new OrderPojo(orderId, dtm.getValueAt(i, 0).toString(),
+                    Integer.parseInt(dtm.getValueAt(i, 1).toString()),
+                    dtm.getValueAt(i, 2).toString(), dtm.getValueAt(i, 3).toString(),
+                    status, dateOfOrder, null);
+
+
+            order.add(med);
+        }
+        return order;
     }
 }

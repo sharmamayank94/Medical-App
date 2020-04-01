@@ -7,12 +7,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.util.Calendar;
 
 public class AddMedicines {
     private JTextField nameTextField;
-    private JPanel addmedicines;
+    private JPanel mainpanel;
     private JTextField productNameTextField;
     private JTextField leavesPerPackTextField;
     private JTextField noOfPacksTextField;
@@ -34,11 +36,18 @@ public class AddMedicines {
     private JButton logoutButton;
     private JLabel addproduct;
     private JButton addProductButton;
-
-
+    private JTextField taxTextField;
+    private JLabel andLabel;
+    private JLabel leavesPerPackLabel;
+    private JLabel noOfPacksLabel;
+    private JLabel medicinesPerLeafLabel;
     private   JScrollPane scroller;
+
+    private boolean isProductAdded;
+
     AddMedicines(){
-        categoryComboBox.addItem("Tablets");
+        categoryComboBox.addItem("Tablet");
+        categoryComboBox.addItem("Capsule");
         categoryComboBox.addItem("Syrup");
         categoryComboBox.addItem("Syringe");
         categoryComboBox.addItem("Sanitizer");
@@ -66,9 +75,10 @@ public class AddMedicines {
                 String company =  companyTextField.getText();
                 String expiryString =  expiryTextField.getText();
                 String productDescription = productDescriptionTextPane.getText();
+                String tax = taxTextField.getText();
 
                 if(name.isEmpty()||category.isEmpty()||sellingPrice.isEmpty()||batchNo.isEmpty()||
-                expiryString.isEmpty()||vendor.isEmpty()||company.isEmpty()||productDescription.isEmpty()||
+                expiryString.isEmpty()||vendor.isEmpty()||company.isEmpty()||
                 MRP.isEmpty()||costPrice.isEmpty()){
                     JOptionPane.showMessageDialog(null, "Please fill all the necessary details");
                     return;
@@ -91,10 +101,10 @@ public class AddMedicines {
                     noOfPacks="0";
 
                 if(leavesPerPack.isEmpty())
-                    leavesPerPack="0";
+                    leavesPerPack="1";
 
                 if(medicinesPerLeaf.isEmpty())
-                    medicinesPerLeaf = "0";
+                    medicinesPerLeaf = "1";
 
 
                 int quantity = Integer.parseInt(noOfPacks)*Integer.parseInt(leavesPerPack)
@@ -114,12 +124,44 @@ public class AddMedicines {
                    boolean result =  ProductsDao.addProduct(product);
                    if(result){
                        JOptionPane.showMessageDialog(null, "Product added to the Database");
+                       setisProductAdded(true);
                    }
                 }catch(SQLException sqle){
                     JOptionPane.showMessageDialog(null, "Problem in Database");
                     sqle.printStackTrace();
                 }
 
+            }
+        });
+
+
+
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        });
+        categoryComboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent itemEvent) {
+                if(categoryComboBox.getSelectedItem().toString().equals("Tablet")||categoryComboBox.getSelectedItem().toString().equals("Capsule")){
+                    leavesPerPackTextField.setVisible(true);
+                    noOfPacksTextField.setVisible(true);
+                    medicinesPerLeafTextField.setVisible(true);
+                    leavesPerPackLabel.setVisible(true);
+                    noOfPacksLabel.setVisible(true);
+                    medicinesPerLeafLabel.setVisible(true);
+                    andLabel.setVisible(true);
+                }else{
+                    leavesPerPackTextField.setVisible(false);
+                    noOfPacksTextField.setVisible(false);
+                    medicinesPerLeafTextField.setVisible(false);
+                    leavesPerPackLabel.setVisible(false);
+                    noOfPacksLabel.setVisible(false);
+                    medicinesPerLeafLabel.setVisible(false);
+                    andLabel.setVisible(false);
+                }
             }
         });
     }
@@ -132,7 +174,7 @@ public class AddMedicines {
 
 
 
-        frame.setContentPane(new AddMedicines().addmedicines);
+        frame.setContentPane(new AddMedicines().mainpanel);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -146,6 +188,32 @@ public class AddMedicines {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+
+    }
+
+    public boolean getisProductAdded(){
+        return this.isProductAdded;
+    }
+
+    public void setisProductAdded(boolean status){
+        this.isProductAdded = status;
+    }
+
+    public void setEntries(String name, String quantity, String vendor, String company){
+        this.nameTextField.setText(name);
+        this.vendorTextField.setText(vendor);
+        this.companyTextField.setText(company);
+
+
+    }
+
+    public void make() {
+        JFrame frame = new JFrame("Add Products");
+        frame.setContentPane(mainpanel);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
+
+
 
     }
 }
