@@ -30,6 +30,7 @@ public class EditDeleteOrder {
     private JButton addRowButton;
     private JButton deleteSelectedRowButton;
     private JButton orderDevliveredButton;
+    private JButton orderedButton;
 
     private String orderId;
     private DefaultTableModel dtm;
@@ -51,7 +52,8 @@ public class EditDeleteOrder {
                 row[2] = med.getCompany();
                 row[3] = med.getVendor();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                row[4] = sdf.format(med.getDateOfOrder().getTime());
+                if(med.getDateOfOrder() == null) row[4] = null;
+                else row[4] = sdf.format(med.getDateOfOrder().getTime());
 
                 dtm.addRow(row);
             }
@@ -198,6 +200,31 @@ public class EditDeleteOrder {
 
             }
         });
+        orderedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Calendar today = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                String date = JOptionPane.showInputDialog(null, "Enter date of Order", sdf.format(today.getTimeInMillis())).toString();
+                today.set(Integer.parseInt(date.substring(6)), Integer.parseInt(date.substring(3,5))-1, Integer.parseInt(date.substring(0,2)));
+
+
+                for(OrderPojo med: order){
+                    med.setDateOfOrder(today);
+                    med.setStatus("Pending");
+
+                }
+                try {
+                    boolean updated = OrdersDao.updateOrder(order);
+                    if(updated==true){
+                        JOptionPane.showMessageDialog(null,"Order Updated");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void make(){
@@ -238,10 +265,17 @@ public class EditDeleteOrder {
         for(int i=0; i<dtm.getRowCount(); i++){
 
             Calendar dateOfOrder = Calendar.getInstance();
-            String tempDate = dtm.getValueAt(i, 4).toString();
+            if(dtm.getValueAt(i, 4)==null || dtm.getValueAt(i, 4).equals("")){
+                System.out.println("maeifewfiwjfwfiwfjwifejiwfejifjiwfiw"+i);
+                dateOfOrder = null;
+            }else{
+                String tempDate = dtm.getValueAt(i, 4).toString();
+                System.out.println(i+"tempdate"+tempDate +"This is tempdate");
+                dateOfOrder.set(Integer.parseInt(tempDate.substring(6)), Integer.parseInt(tempDate.substring(3,5))-1,
+                        Integer.parseInt(tempDate.substring(0,2)));
+            }
 
-            dateOfOrder.set(Integer.parseInt(tempDate.substring(6)), Integer.parseInt(tempDate.substring(3,5))-1,
-                    Integer.parseInt(tempDate.substring(0,2)));
+
 
 
             OrderPojo med = new OrderPojo(orderId, dtm.getValueAt(i, 0).toString(),

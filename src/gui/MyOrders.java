@@ -156,7 +156,11 @@ public class MyOrders {
         company=company.substring(0, company.length()-5)+"</html>";
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        String dateOfOrder = sdf.format(order.get(0).getDateOfOrder().getTime());
+        String dateOfOrder=null;
+        if(order.get(0).getDateOfOrder()!=null){
+            dateOfOrder = sdf.format(order.get(0).getDateOfOrder().getTime());
+        }
+
         String dateOfOrderCompletion;
         if(order.get(0).getDateOfOrderCompletion()!=null){
             dateOfOrderCompletion = sdf.format(order.get(0).getDateOfOrderCompletion().getTime());
@@ -214,6 +218,9 @@ public class MyOrders {
 
                 else if(value.toString().equals("Delivered"))
                     mycomp.setBackground(Color.GREEN);
+
+                else if(value.toString().equals("Unordered"))
+                    mycomp.setBackground(Color.pink);
 
                 else mycomp.setBackground(Color.cyan);
                 return mycomp;

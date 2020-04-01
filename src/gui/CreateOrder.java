@@ -30,6 +30,7 @@ public class CreateOrder {
     private JTextField quantityTextField;
     private JTextField companyTextField;
     private JTextField vendorTextField;
+    private JButton createMemoButton;
     private JLabel Quantity;
 
     private DefaultTableModel dtm;
@@ -94,6 +95,43 @@ public class CreateOrder {
 
                 if(nameTextField.getText().length()>0 && quantityTextField.getText().length()>0 && companyTextField.getText().length()>0 && vendorTextField.getText().length()>0)
                     dtm.addRow(new Object[] {nameTextField.getText(), quantityTextField.getText(), companyTextField.getText(), vendorTextField.getText(), });
+            }
+        });
+        createMemoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try{
+                    orderlist = new ArrayList<>();
+                    for(int i =0; i<table1.getRowCount(); i++){
+                        String[]data = new String[4];
+                        for(int j=0; j<table1.getColumnCount()-1; j++){
+                            data[j] = table1.getValueAt(i, j).toString();
+                        }
+                        System.out.println(orderId);
+                        OrderPojo order = new OrderPojo(orderId, data[0], Integer.parseInt(data[1]), data[2], data[3], "Unordered", null, null);
+                        orderlist.add(order);
+                    }
+
+                    //adding order to database
+                    boolean added = OrdersDao.addOrder(orderlist);
+                    if(added){
+                        JOptionPane.showMessageDialog(null, "Memo Created");
+                        int rowCount = dtm.getRowCount();
+                        System.out.println(rowCount);
+                        for(int i=0; i<rowCount; i++){
+
+                            dtm.removeRow(0);
+                        }
+                        nameTextField.setText("");
+                        quantityTextField.setText("");
+                        companyTextField.setText("");
+                        vendorTextField.setText("");
+                    }
+
+
+                }catch(SQLException sqle){
+                    sqle.printStackTrace();
+                }
             }
         });
     }
