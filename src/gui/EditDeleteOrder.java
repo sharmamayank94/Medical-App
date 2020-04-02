@@ -58,10 +58,20 @@ public class EditDeleteOrder {
                 dtm.addRow(row);
             }
 
-            if(order.get(0).getStatus().equals("Delivered")){
+            if(order.get(0).getStatus().equals("Delivered") || order.get(0).getStatus().equals("Delivered/Stock not updated")){
                 updateButton.setEnabled(false);
                 deleteSelectedRowButton.setEnabled(false);
                 addRowButton.setEnabled(false);
+                orderedButton.setEnabled(false);
+
+            }
+
+            orderDevliveredButton.setEnabled(false);
+            for(OrderPojo med: order){
+                if(!med.getStatus().toString().equals("Delivered")){
+                    orderDevliveredButton.setEnabled(true);
+                    break;
+                }
             }
 
         } catch (SQLException e) {
@@ -112,7 +122,9 @@ public class EditDeleteOrder {
             public void actionPerformed(ActionEvent actionEvent) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                 Calendar today = Calendar.getInstance();
-                String todayDate  = sdf.format(today.getTime());
+                String todayDate;
+                if(order.get(0).getStatus().equals("Pending")) todayDate  = sdf.format(today.getTime());
+                else todayDate = null;
                 dtm.addRow(new Object[] {nameTextField.getText(), quantityTextField.getText(), companyTextField.getText(), vendorTextField.getText(), todayDate});
             }
         });
@@ -127,6 +139,28 @@ public class EditDeleteOrder {
         orderDevliveredButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+
+                String dateOfOrderCompletionString = JOptionPane.showInputDialog(mainpanel,
+                        "Please enter date of order Completion",
+                        sdf.format(Calendar.getInstance().getTimeInMillis()));
+
+                Calendar dateOfOrderCompletion = Calendar.getInstance();
+                dateOfOrderCompletion.set(Integer.parseInt(dateOfOrderCompletionString.substring(6)),
+                        Integer.parseInt(dateOfOrderCompletionString.substring(3,5))-1,
+                        Integer.parseInt(dateOfOrderCompletionString.substring(0,2)));
+
+                for(OrderPojo med: order){
+                    med.setDateOfOrderCompletion(dateOfOrderCompletion);
+                }
+
+                try{
+                    boolean result = OrdersDao.setDateOfOrderCompletion(orderId, dateOfOrderCompletion);
+                }catch (SQLException sqle){
+                    sqle.printStackTrace();
+                }
+
                 int response =  JOptionPane.showConfirmDialog(null,
                         "Do you wish to add medicines to stock now?");
 
@@ -200,6 +234,7 @@ public class EditDeleteOrder {
 
             }
         });
+
         orderedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -209,8 +244,12 @@ public class EditDeleteOrder {
                 String date = JOptionPane.showInputDialog(null, "Enter date of Order", sdf.format(today.getTimeInMillis())).toString();
                 today.set(Integer.parseInt(date.substring(6)), Integer.parseInt(date.substring(3,5))-1, Integer.parseInt(date.substring(0,2)));
 
+                for(int i =0; i<dtm.getRowCount(); i++){
+                    dtm.setValueAt(sdf.format(today.getTimeInMillis()), i, 4);
+                }
 
                 for(OrderPojo med: order){
+
                     med.setDateOfOrder(today);
                     med.setStatus("Pending");
 
@@ -251,6 +290,7 @@ public class EditDeleteOrder {
         String[][] rows = {};
         String [] cols = {"Name", "Quantity", "Company", "Vendor", "Date Of Order"};
         dtm = new DefaultTableModel(rows, cols);
+
         table1 = new JTable(dtm);
 
     }

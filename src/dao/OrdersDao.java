@@ -112,6 +112,15 @@ public class OrdersDao {
         return result>0;
     }
 
+    public static boolean setDateOfOrderCompletion(String orderId, Calendar dateOfOrderCompletion) throws SQLException{
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement("Update orders set Date_Of_Order_Completion = ? where OrderId=?");
+        ps.setDate(1, new Date(dateOfOrderCompletion.getTimeInMillis()));
+        ps.setString(2, orderId);
+
+        int result = ps.executeUpdate();
+        return result>0;
+    }
+
     public static ArrayList<OrderPojo> getOrders() throws SQLException{
         ArrayList<OrderPojo> order = new ArrayList<>();
         Connection conn = DBConnection.getConnection();

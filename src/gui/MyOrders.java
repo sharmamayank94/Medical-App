@@ -2,6 +2,7 @@ package gui;
 
 
 import dao.OrdersDao;
+import dao.ProductsDao;
 import pojo.OrderPojo;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class MyOrders {
 
@@ -146,10 +148,23 @@ public class MyOrders {
             }
 
         }
-        String name = "<html>", company="<html>";
+        String name = "<html>", company="<html>", quantityLeft = "<html>";
+        HashMap<String, Integer> medicinesQuantity = null;
+        try{
+            ArrayList<String> medicines = new ArrayList<>();
+            for(OrderPojo med: order){
+                medicines.add(med.getName());
+            }
+           medicinesQuantity = ProductsDao.getMedicineQuantity(medicines);
+
+        }catch(SQLException sqle){
+            sqle.printStackTrace();
+        }
+
         for(OrderPojo med: order){
             name+=med.getName()+"<br/>";
             company+=med.getCompany()+"<br/>";
+            quantityLeft+=medicinesQuantity.get(med.getName())+"<br/>";
         }
 
         name=name.substring(0, name.length()-5)+"</html>";
@@ -168,7 +183,7 @@ public class MyOrders {
             dateOfOrderCompletion = null;
         }
 
-        dtm.addRow(new Object[]{order.get(0).getOrderId(), name, "43", company, order.get(0).getVendor(), dateOfOrder,
+        dtm.addRow(new Object[]{order.get(0).getOrderId(), name, quantityLeft, company, order.get(0).getVendor(), dateOfOrder,
                 status, dateOfOrderCompletion, ""});
 
         int count = name.split("<br/>").length;
@@ -198,7 +213,14 @@ public class MyOrders {
         String [] columns = {"Order Id", "Name", "Current Quantity", "Company", "Vendor", "Date of Order", "Status", "Date of Order Completion", "Edit/Delete"};
 
 
-        dtm = new DefaultTableModel(null, columns);
+        dtm = new DefaultTableModel(null, columns){
+            @Override
+            public boolean isCellEditable(int row, int col){
+                if(col==8) return true;
+                else return false;
+
+            }
+        };
 
         table1= new JTable(dtm);
         table1.setFillsViewportHeight(true);
