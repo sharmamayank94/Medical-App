@@ -24,6 +24,7 @@ public class MyOrders {
     private JScrollPane scrollPane;
     private JButton homeButton;
     private JButton logoutButton;
+    private JTextField medicineTextField;
     private JButton editOrdersButton;
     private static JFrame frame;
     
@@ -86,6 +87,36 @@ public class MyOrders {
         });
 
 
+        medicineTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+                trs.setModel(null);
+                trs.setModel(dtm);
+                setComparator();
+                System.out.println(dtm.getRowCount()+" rowcount");
+                if(e.isShiftDown()) return;
+
+                if(e.getKeyCode()==KeyEvent.VK_BACK_SPACE){
+                    int rowcount = dtm.getRowCount();
+
+                    for(int i =0; i<rowcount; i++){
+                        dtm.removeRow(0);
+                    }
+
+                    addAllOrders();
+                }
+
+                String medicineName = medicineTextField.getText();
+                System.out.println(medicineName);
+                for(int i =0; i<dtm.getRowCount(); ){
+                    if(!dtm.getValueAt(i, 1).toString().contains(medicineName)){
+                        System.out.println(i+" "+dtm.getRowCount()+" "+dtm.getValueAt(0,1).toString());
+                        dtm.removeRow(i);
+                    }else i++;
+                }
+            }
+        });
     }
 
     private void addAllOrders() {
@@ -112,13 +143,18 @@ public class MyOrders {
 
 
         try{
+            trs.setModel(null);
+            trs.setModel(dtm);
+            setComparator();
             String tempMaxOrderId = OrdersDao.getMaxOrderId();
             int noOfNewOrders = Integer.parseInt(tempMaxOrderId.substring(3)) - Integer.parseInt(maxOrderId.substring(3));
 
             for(int i=0; i<noOfNewOrders; i++){
                 maxOrderId = "ord"+ (Integer.parseInt(maxOrderId.substring(3))+1);
                 ArrayList<OrderPojo> order = OrdersDao.getOrder(maxOrderId);
-
+                for(OrderPojo med:order){
+                    orderList.add(med);
+                }
                 addOrderToTable(order);
             }
 
@@ -332,6 +368,17 @@ public class MyOrders {
 //        sorter.sort();
 
         trs = new TableRowSorter(dtm);
+
+        setComparator();
+        table1.setRowSorter(trs);
+//        ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
+////
+//        int columnIndexToSort = 0;
+//        sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
+//        trs.setSortKeys(sortKeys);
+    }
+
+    public void setComparator(){
         trs.setComparator(0, new Comparator<String>() {
             @Override
             public int compare(String a, String b){
@@ -344,18 +391,8 @@ public class MyOrders {
                     return -1;
                 else
                     return 0;
-
-
-
             }
         });
-
-        table1.setRowSorter(trs);
-//        ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
-////
-//        int columnIndexToSort = 0;
-//        sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
-//        trs.setSortKeys(sortKeys);
     }
 }
 
