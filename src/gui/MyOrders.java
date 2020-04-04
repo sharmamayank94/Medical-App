@@ -1,6 +1,6 @@
 package gui;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
+//import com.mysql.cj.x.protobuf.MysqlxCrud;
 import dao.OrdersDao;
 import pojo.OrderPojo;
 
@@ -47,7 +47,9 @@ public class MyOrders {
             e.printStackTrace();
         }
 
-        addAllOrders();
+      if(!orderList.isEmpty()){
+          addAllOrders();
+      }
 
 
 

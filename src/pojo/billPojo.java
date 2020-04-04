@@ -10,6 +10,13 @@ public class billPojo {
     private String category;
     private String batchno;
     private Date expiry;
+    private String description;
+    private double mrp;
+    private double rate;
+    private int noOfMedicinesPerStrip;
+    private int noOfLeavesPerPack;
+    private double tax;
+    private int quantity;
 
     public String getBill_No() {
         return Bill_No;
@@ -65,5 +72,61 @@ public class billPojo {
 
     public void setExpiry(Date expiry) {
         this.expiry = expiry;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getMrp() {
+        return mrp;
+    }
+
+    public void setMrp(double mrp) {
+        this.mrp = mrp;
+    }
+
+    public double getRate() {
+        return rate;
+    }
+
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    public int getNoOfMedicinesPerStrip() {
+        return noOfMedicinesPerStrip;
+    }
+
+    public void setNoOfMedicinesPerStrip(int noOfMedicinesPerStrip) {
+        this.noOfMedicinesPerStrip = noOfMedicinesPerStrip;
+    }
+
+    public int getNoOfLeavesPerPack() {
+        return noOfLeavesPerPack;
+    }
+
+    public void setNoOfLeavesPerPack(int noOfLeavesPerPack) {
+        this.noOfLeavesPerPack = noOfLeavesPerPack;
+    }
+
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

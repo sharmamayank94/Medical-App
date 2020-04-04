@@ -21,6 +21,7 @@ public class CustomerBillDetails {
     private String email;
 
     public CustomerBillDetails() {
+        CustomerBillsTable.setRowHeight(30);
         System.out.println("inside constructor of customer bill details");
         ListSelectionModel model = CustomerBillsTable.getSelectionModel();
         model.addListSelectionListener(new ListSelectionListener() {
@@ -32,6 +33,7 @@ public class CustomerBillDetails {
                     String billNo = (String)CustomerBillsTable.getValueAt(selectedRow,1);
                     BillContent bc = new BillContent();
                     bc.make(billNo);
+                    CustomerBillsTable.getSelectionModel().clearSelection();
 
                 }
             }
@@ -91,7 +93,6 @@ public class CustomerBillDetails {
         System.out.println("inside make of customer bill details");
         JFrame frame = new JFrame("Customer Bills");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setContentPane(this.CustomerBills);
         frame.setVisible(true);
