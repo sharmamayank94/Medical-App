@@ -1,7 +1,8 @@
 package gui;
 
-//import com.mysql.cj.x.protobuf.MysqlxCrud;
+
 import dao.OrdersDao;
+import dao.ProductsDao;
 import pojo.OrderPojo;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class MyOrders {
 
@@ -22,6 +24,7 @@ public class MyOrders {
     private JScrollPane scrollPane;
     private JButton homeButton;
     private JButton logoutButton;
+    private JTextField medicineTextField;
     private JButton editOrdersButton;
     private static JFrame frame;
     
@@ -47,9 +50,13 @@ public class MyOrders {
             e.printStackTrace();
         }
 
+
       if(!orderList.isEmpty()){
           addAllOrders();
       }
+
+
+
 
 
 
@@ -85,6 +92,36 @@ public class MyOrders {
         });
 
 
+        medicineTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+                trs.setModel(null);
+                trs.setModel(dtm);
+                setComparator();
+                System.out.println(dtm.getRowCount()+" rowcount");
+                if(e.isShiftDown()) return;
+
+                if(e.getKeyCode()==KeyEvent.VK_BACK_SPACE){
+                    int rowcount = dtm.getRowCount();
+
+                    for(int i =0; i<rowcount; i++){
+                        dtm.removeRow(0);
+                    }
+
+                    addAllOrders();
+                }
+
+                String medicineName = medicineTextField.getText();
+                System.out.println(medicineName);
+                for(int i =0; i<dtm.getRowCount(); ){
+                    if(!dtm.getValueAt(i, 1).toString().contains(medicineName)){
+                        System.out.println(i+" "+dtm.getRowCount()+" "+dtm.getValueAt(0,1).toString());
+                        dtm.removeRow(i);
+                    }else i++;
+                }
+            }
+        });
     }
 
     private void addAllOrders() {
@@ -111,13 +148,18 @@ public class MyOrders {
 
 
         try{
+            trs.setModel(null);
+            trs.setModel(dtm);
+            setComparator();
             String tempMaxOrderId = OrdersDao.getMaxOrderId();
             int noOfNewOrders = Integer.parseInt(tempMaxOrderId.substring(3)) - Integer.parseInt(maxOrderId.substring(3));
 
             for(int i=0; i<noOfNewOrders; i++){
                 maxOrderId = "ord"+ (Integer.parseInt(maxOrderId.substring(3))+1);
                 ArrayList<OrderPojo> order = OrdersDao.getOrder(maxOrderId);
-
+                for(OrderPojo med:order){
+                    orderList.add(med);
+                }
                 addOrderToTable(order);
             }
 
@@ -128,18 +170,53 @@ public class MyOrders {
     }
 
     private void addOrderToTable(ArrayList<OrderPojo> order) {
+        String status="";
+        for(OrderPojo med: order){
+            if(med.getStatus().equals("Pending")){
+                status = "Pending";
+                break;
+            }
+            else if(med.getStatus().equals("Delivered/Stock not updated")){
+                status = "Delivered/Stock not updated";
+                break;
+            }
+            else if(med.getStatus().equals("Unordered")){
+                status = "Unordered";
+                break;
+            }
+            else if(med.getStatus().equals("Delivered")){
+                status = "Delivered";
+            }
 
-        String name = "<html>", company="<html>";
+        }
+        String name = "<html>", company="<html>", quantityLeft = "<html>";
+        HashMap<String, Integer> medicinesQuantity = null;
+        try{
+            ArrayList<String> medicines = new ArrayList<>();
+            for(OrderPojo med: order){
+                medicines.add(med.getName());
+            }
+           medicinesQuantity = ProductsDao.getMedicineQuantity(medicines);
+
+        }catch(SQLException sqle){
+            sqle.printStackTrace();
+        }
+
         for(OrderPojo med: order){
             name+=med.getName()+"<br/>";
             company+=med.getCompany()+"<br/>";
+            quantityLeft+=medicinesQuantity.get(med.getName())+"<br/>";
         }
 
         name=name.substring(0, name.length()-5)+"</html>";
         company=company.substring(0, company.length()-5)+"</html>";
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        String dateOfOrder = sdf.format(order.get(0).getDateOfOrder().getTime());
+        String dateOfOrder=null;
+        if(order.get(0).getDateOfOrder()!=null){
+            dateOfOrder = sdf.format(order.get(0).getDateOfOrder().getTime());
+        }
+
         String dateOfOrderCompletion;
         if(order.get(0).getDateOfOrderCompletion()!=null){
             dateOfOrderCompletion = sdf.format(order.get(0).getDateOfOrderCompletion().getTime());
@@ -147,8 +224,9 @@ public class MyOrders {
             dateOfOrderCompletion = null;
         }
 
+        dtm.addRow(new Object[]{order.get(0).getOrderId(), name, quantityLeft, company, order.get(0).getVendor(), dateOfOrder,
+                status, dateOfOrderCompletion, ""});
 
-        dtm.addRow(new Object[]{order.get(0).getOrderId(), name, "43", company, order.get(0).getVendor(), dateOfOrder, order.get(0).getStatus(), dateOfOrderCompletion, ""});
         int count = name.split("<br/>").length;
         table1.setRowHeight(dtm.getRowCount()-1, count*30);
 
@@ -176,7 +254,14 @@ public class MyOrders {
         String [] columns = {"Order Id", "Name", "Current Quantity", "Company", "Vendor", "Date of Order", "Status", "Date of Order Completion", "Edit/Delete"};
 
 
-        dtm = new DefaultTableModel(null, columns);
+        dtm = new DefaultTableModel(null, columns){
+            @Override
+            public boolean isCellEditable(int row, int col){
+                if(col==8) return true;
+                else return false;
+
+            }
+        };
 
         table1= new JTable(dtm);
         table1.setFillsViewportHeight(true);
@@ -194,8 +279,13 @@ public class MyOrders {
 
                 }
 
-                else if(value.toString().equals("Completed"))
+                else if(value.toString().equals("Delivered"))
                     mycomp.setBackground(Color.GREEN);
+
+                else if(value.toString().equals("Unordered"))
+                    mycomp.setBackground(Color.pink);
+
+                else mycomp.setBackground(Color.cyan);
                 return mycomp;
             }
         };
@@ -283,6 +373,17 @@ public class MyOrders {
 //        sorter.sort();
 
         trs = new TableRowSorter(dtm);
+
+        setComparator();
+        table1.setRowSorter(trs);
+//        ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
+////
+//        int columnIndexToSort = 0;
+//        sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
+//        trs.setSortKeys(sortKeys);
+    }
+
+    public void setComparator(){
         trs.setComparator(0, new Comparator<String>() {
             @Override
             public int compare(String a, String b){
@@ -295,18 +396,8 @@ public class MyOrders {
                     return -1;
                 else
                     return 0;
-
-
-
             }
         });
-
-        table1.setRowSorter(trs);
-//        ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
-////
-//        int columnIndexToSort = 0;
-//        sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
-//        trs.setSortKeys(sortKeys);
     }
 }
 

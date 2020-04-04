@@ -3,9 +3,9 @@ package dao;
 import dbutil.DBConnection;
 import pojo.ProductPojo;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProductsDao {
     public static boolean addProduct(ProductPojo product) throws SQLException {
@@ -31,5 +31,30 @@ public class ProductsDao {
 
         int result = ps.executeUpdate();
         return result == 1;
+    }
+
+    public static HashMap getMedicineQuantity(ArrayList<String> medicines) throws SQLException{
+        HashMap<String, Integer> medQuantity = new HashMap<>();
+        Statement s = DBConnection.getConnection().createStatement();
+        String medicinesString = "";
+
+        for(int i =0; i<medicines.size(); i++){
+            medicinesString+="'"+medicines.get(i)+"',";
+        }
+        medicinesString=medicinesString.substring(0, medicinesString.length()-1);
+        String query = "select Name, sum(Total_Quantity) from medicine where name in ("+medicinesString+") group by Name";
+
+        ResultSet rs = s.executeQuery(query);
+        while(rs.next()){
+            medQuantity.put(rs.getString(1), rs.getInt(2));
+        }
+
+        for(String medicine: medicines){
+            if(!medQuantity.containsKey(medicine)){
+                medQuantity.put(medicine, 0);
+            }
+        }
+
+        return medQuantity;
     }
 }

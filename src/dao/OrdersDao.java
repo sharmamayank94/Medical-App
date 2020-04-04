@@ -19,8 +19,9 @@ public class OrdersDao {
            ps.setInt(3, med.getQuantity());
            ps.setString(4, med.getCompany());
            ps.setString(5, med.getVendor());
-           ps.setString(6, "Pending");
-           ps.setDate(7, new java.sql.Date(med.getDateOfOrder().getTimeInMillis()));
+           ps.setString(6, med.getStatus());
+           if(med.getDateOfOrder()==null) ps.setDate(7, null);
+           else ps.setDate(7, new java.sql.Date(med.getDateOfOrder().getTimeInMillis()));
 
            int executed = ps.executeUpdate();
            if(executed==0){
@@ -53,7 +54,11 @@ public class OrdersDao {
             else
                 dateOfOrderCompletion = null;
 
-            dateOfOrder.setTime(rs.getDate(10));
+            try{
+                dateOfOrder.setTime(rs.getDate(10));
+            }catch(NullPointerException npe){
+                dateOfOrder  =null;
+            }
             OrderPojo med = new OrderPojo(rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5),
                     rs.getString(6), rs.getString(7),  dateOfOrder, dateOfOrderCompletion);
 
@@ -86,8 +91,9 @@ public class OrdersDao {
             ps.setInt(3, med.getQuantity());
             ps.setString(4, med.getCompany());
             ps.setString(5, med.getVendor());
-            ps.setString(6, "Pending");
-            ps.setDate(7, new java.sql.Date(med.getDateOfOrder().getTimeInMillis()));
+            ps.setString(6, med.getStatus());
+            if(med.getDateOfOrder()!=null) ps.setDate(7, new java.sql.Date(med.getDateOfOrder().getTimeInMillis()));
+            else ps.setDate(7,null);
 
             int result = ps.executeUpdate();
             if(result==0){
@@ -97,6 +103,24 @@ public class OrdersDao {
         return true;
     }
 
+    public static boolean updateOrderStatus(String orderId, String status, String name) throws SQLException{
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement("Update orders set Status = ? where OrderId = ? and Name=?");
+        ps.setString(1, status);
+        ps.setString(2, orderId);
+        ps.setString(3, name);
+        int result = ps.executeUpdate();
+        return result>0;
+    }
+
+    public static boolean setDateOfOrderCompletion(String orderId, Calendar dateOfOrderCompletion) throws SQLException{
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement("Update orders set Date_Of_Order_Completion = ? where OrderId=?");
+        ps.setDate(1, new Date(dateOfOrderCompletion.getTimeInMillis()));
+        ps.setString(2, orderId);
+
+        int result = ps.executeUpdate();
+        return result>0;
+    }
+
     public static ArrayList<OrderPojo> getOrders() throws SQLException{
         ArrayList<OrderPojo> order = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
@@ -104,7 +128,8 @@ public class OrdersDao {
         ResultSet rs = s.executeQuery("Select OrderId, Name, Quantity, Company, Vendor, Status, Date_Of_Order,  Date_Of_Order_Completion from orders");
         while(rs.next()){
             Calendar dateOfOrder = Calendar.getInstance();
-            dateOfOrder.setTime(rs.getDate(7));
+            if(rs.getDate(7)==null) dateOfOrder = null;
+            else dateOfOrder.setTime(rs.getDate(7));
             Calendar dateOfOrderCompletion = Calendar.getInstance();
             if(rs.getDate(8)!=null){
                 dateOfOrderCompletion.setTime(rs.getDate(8));
