@@ -49,15 +49,15 @@ public class Bill {
     private JButton resetEntriesButton;
     private JTextField textbox = new JTextField();
     private int a=0;
-    Set<String> s;
+//    Set<String> s;
     private ArrayList<String> categoriesArray;
     public Bill() {
-        s = new TreeSet<>();
-        s.add("crocin");
-        s.add("torex");
-        s.add("taxinn");
-        s.add("novalgin");
-        s.add("combiflam");
+//        s = new TreeSet<>();
+//        s.add("crocin");
+//        s.add("torex");
+//        s.add("taxinn");
+//        s.add("novalgin");
+//        s.add("combiflam");
         txtvalue.setEditable(false);
         billNo.setEditable(false);
         txtdate.setEditable(false);
@@ -358,68 +358,68 @@ public class Bill {
 
         });
 
-        billtable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(textbox));
-        textbox.addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(CaretEvent e) {
-                System.out.println("caret listener " + textbox.getText());
-                int row = billtable.getSelectedRow();
-                String to_check = textbox.getText();
-//                String to_check = (String) billtable.getValueAt(row, 1);
-                int to_check_len = to_check.length();
-                for (String data : s) {
-                    String check_from_data = "";
-                    for (int i = 0; i < to_check_len; i++) {
-                        if (to_check_len <= data.length()) {
-                            check_from_data = check_from_data + data.charAt(i);
-                        }
-                    }
-                    System.out.println(to_check);
-                    if (check_from_data.equals(to_check)) {
-                        System.out.println("they are equal");
-                        billtable.setValueAt(data, row, 1);
-                        textbox.setSelectionStart(to_check_len);
-                        textbox.setSelectionEnd(data.length());
-//                                JTextComponent edit = (JTextComponent) billtable.getCellEditor(row, 1);
-//                                edit.select(to_check_len, data.length());
-                        break;
-                    }
+//        billtable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(textbox));
+//        textbox.addCaretListener(new CaretListener() {
+//            @Override
+//            public void caretUpdate(CaretEvent e) {
+//                System.out.println("caret listener " + textbox.getText());
+//                int row = billtable.getSelectedRow();
+//                String to_check = textbox.getText();
+////                String to_check = (String) billtable.getValueAt(row, 1);
+//                int to_check_len = to_check.length();
+//                for (String data : s) {
+//                    String check_from_data = "";
+//                    for (int i = 0; i < to_check_len; i++) {
+//                        if (to_check_len <= data.length()) {
+//                            check_from_data = check_from_data + data.charAt(i);
+//                        }
+//                    }
+//                    System.out.println(to_check);
+//                    if (check_from_data.equals(to_check)) {
+//                        System.out.println("they are equal");
+//                        billtable.setValueAt(data, row, 1);
+//                        textbox.setSelectionStart(to_check_len);
+//                        textbox.setSelectionEnd(data.length());
+////                                JTextComponent edit = (JTextComponent) billtable.getCellEditor(row, 1);
+////                                edit.select(to_check_len, data.length());
+//                        break;
+//                    }
+//
+//                }
+//            }
+//        });
 
-                }
-            }
-        });
-
-        textbox.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                System.out.println("inside key listener of textbox");
-                int row = billtable.getSelectedRow();
-                if(billtable.getSelectedColumn()==1) {
-                    if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE) {
-
-                    } else {
-                        String to_check = (String) billtable.getValueAt(row, 1);
-                        int to_check_len = to_check.length();
-                        for (String data : s) {
-                            String check_from_data = "";
-                            for (int i = 0; i < to_check_len; i++) {
-                                if (to_check_len <= data.length()) {
-                                    check_from_data = check_from_data + data.charAt(i);
-                                }
-                            }
-                            if (check_from_data.equals(to_check)) {
-                                billtable.setValueAt(data, row, 1);
-                                textbox.setSelectionStart(to_check_len);
-                                textbox.setSelectionEnd(data.length());
-//                                JTextComponent edit = (JTextComponent) billtable.getCellEditor(row, 1);
-//                                edit.select(to_check_len, data.length());
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        });
+//        textbox.addKeyListener(new KeyAdapter() {
+//            @Override
+//            public void keyTyped(KeyEvent e) {
+//                System.out.println("inside key listener of textbox");
+//                int row = billtable.getSelectedRow();
+//                if(billtable.getSelectedColumn()==1) {
+//                    if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE) {
+//
+//                    } else {
+//                        String to_check = (String) billtable.getValueAt(row, 1);
+//                        int to_check_len = to_check.length();
+//                        for (String data : s) {
+//                            String check_from_data = "";
+//                            for (int i = 0; i < to_check_len; i++) {
+//                                if (to_check_len <= data.length()) {
+//                                    check_from_data = check_from_data + data.charAt(i);
+//                                }
+//                            }
+//                            if (check_from_data.equals(to_check)) {
+//                                billtable.setValueAt(data, row, 1);
+//                                textbox.setSelectionStart(to_check_len);
+//                                textbox.setSelectionEnd(data.length());
+////                                JTextComponent edit = (JTextComponent) billtable.getCellEditor(row, 1);
+////                                edit.select(to_check_len, data.length());
+//                                break;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        });
 
 //        billtable.addFocusListener(new FocusAdapter() {
 //            @Override
