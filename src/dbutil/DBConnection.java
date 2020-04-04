@@ -10,12 +10,14 @@ public class DBConnection {
 
     static{
         try{
-//            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
           conn=DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/Medical","root","test");
 
         }catch(SQLException sqle){
             JOptionPane.showMessageDialog(null, "Problem in Database");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

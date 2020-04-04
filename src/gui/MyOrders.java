@@ -50,8 +50,13 @@ public class MyOrders {
             e.printStackTrace();
         }
 
-        if(!orderList.isEmpty())
-            addAllOrders();
+
+      if(!orderList.isEmpty()){
+          addAllOrders();
+      }
+
+
+
 
 
 

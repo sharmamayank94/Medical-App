@@ -16,6 +16,11 @@ public class BillContent {
     private JButton logoutButton;
     private JButton backButton;
     private String billNo;
+
+    public BillContent() {
+        billContentTable.setRowHeight(25);
+    }
+
     public static JTable createTable(){
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("S_No");
