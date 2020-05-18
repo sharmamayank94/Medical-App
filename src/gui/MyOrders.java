@@ -122,6 +122,22 @@ public class MyOrders {
                 }
             }
         });
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                AdminPanel am = new AdminPanel();
+                am.make();
+                frame.dispose();
+            }
+        });
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                LoginPanel lp = new LoginPanel();
+                lp.make();
+                frame.dispose();
+            }
+        });
     }
 
     private void addAllOrders() {

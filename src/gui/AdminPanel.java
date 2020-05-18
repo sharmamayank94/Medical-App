@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AdminPanel {
     private JPanel adminpanel;
@@ -17,6 +19,7 @@ public class AdminPanel {
     private JButton vendorInformationButton;
     private JButton addProductsButton;
     private JButton logoutButton;
+    private static JFrame frame;
 
     AdminPanel(){
         ImageIcon icon = new ImageIcon("src/gui/Images/AdminImage.png");
@@ -59,14 +62,45 @@ public class AdminPanel {
         temp = icon.getImage();
         img = temp.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
         vendorInformationButton.setIcon(new ImageIcon(img));
+        addProductsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+               AddMedicines am = new AddMedicines();
+               am.make();
+               frame.dispose();
+            }
+        });
+        myOrdersButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MyOrders mo = new MyOrders();
+                mo.make();
+                frame.dispose();
+            }
+        });
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                LoginPanel lp = new LoginPanel();
+                lp.make();
+                frame.dispose();
+            }
+        });
     }
 
     public static  void main(String[] args){
-        JFrame frame = new JFrame("Admin Panel");
+        frame = new JFrame("Admin Panel");
         frame.setContentPane(new AdminPanel().adminpanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1200, 800);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    public void make() {
+        frame = new JFrame("Admin Panel");
+        frame.setContentPane(this.adminpanel);
+        frame.setVisible(true);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 }

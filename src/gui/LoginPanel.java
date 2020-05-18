@@ -2,15 +2,17 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LoginPanel {
     private JPanel loginpanel;
-    private JTextField textField1;
-    private JTextField textField2;
+    private JTextField usernameTextField;
     private JRadioButton adminRadioButton;
     private JRadioButton userRadioButton;
     private JButton loginButton;
     private JLabel LoginImage;
+    private JPasswordField passwordField;
     private JPanel gradpanel;
    LoginPanel(){
         ImageIcon img = new ImageIcon("src/gui/Images/LoginImage.png");
@@ -37,6 +39,12 @@ public class LoginPanel {
        };
        gradpanel.add(loginpanel);
        gradpanel.setSize(900, 300);
+       loginButton.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent actionEvent) {
+                
+           }
+       });
    }
     public static void main(String[] args) {
         JFrame frame = new JFrame("LoginPanel");
@@ -45,5 +53,14 @@ public class LoginPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    public void make() {
+       JFrame frame = new JFrame("Login Panel");
+       frame.setContentPane(this.gradpanel);
+       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       frame.pack();
+       frame.setLocationRelativeTo(null);
+       frame.setVisible(true);
     }
 }
