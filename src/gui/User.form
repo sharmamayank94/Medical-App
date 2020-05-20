@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.User">
+  <grid id="27dc6" binding="mainpanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="10" left="10" bottom="10" right="10"/>
+    <constraints>
+      <xy x="20" y="20" width="500" height="513"/>
+    </constraints>
+    <properties>
+      <preferredSize width="1366" height="768"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <scrollpane id="95553" binding="userssp" custom-create="true">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="a7b56" class="javax.swing.JTable" binding="table" custom-create="true">
+            <constraints/>
+            <properties>
+              <autoCreateRowSorter value="true"/>
+              <cellSelectionEnabled value="true"/>
+              <columnSelectionAllowed value="true"/>
+              <enabled value="true"/>
+              <fillsViewportHeight value="true"/>
+              <font size="18"/>
+              <gridColor color="-15067321"/>
+              <intercellSpacing width="2" height="1"/>
+              <rowHeight value="30"/>
+              <rowSelectionAllowed value="true"/>
+              <selectionForeground color="-23626"/>
+            </properties>
+            <clientProperties>
+              <JTable.autoStartsEdit class="java.lang.Boolean" value="false"/>
+              <Table.isFileList class="java.lang.Boolean" value="false"/>
+            </clientProperties>
+          </component>
+        </children>
+      </scrollpane>
+      <grid id="8f8f2" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="10" left="10" bottom="10" right="10"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-13336334"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="5d662" class="javax.swing.JButton" binding="logoutButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="20"/>
+              <text value="Logout"/>
+            </properties>
+          </component>
+          <component id="eed86" class="javax.swing.JButton" binding="backButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="20"/>
+              <text value="Back"/>
+            </properties>
+          </component>
+          <component id="33db3" class="javax.swing.JButton" binding="homeButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="20"/>
+              <text value="Home"/>
+            </properties>
+          </component>
+          <component id="bfbab" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="24" style="1"/>
+              <foreground color="-131587"/>
+              <text value="Users"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <component id="6ab15" class="javax.swing.JButton" binding="addUserButton" default-binding="true">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1250830"/>
+          <font size="22"/>
+          <text value="Add User"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
