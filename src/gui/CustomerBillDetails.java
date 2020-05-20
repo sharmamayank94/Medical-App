@@ -1,5 +1,6 @@
 package gui;
 
+import com.mysql.cj.log.Log;
 import dao.billDao;
 import pojo.billPojo;
 
@@ -7,6 +8,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -19,6 +22,7 @@ public class CustomerBillDetails {
     private JPanel CustomerBills;
     private String name;
     private String email;
+    private static JFrame frame;
 
     public CustomerBillDetails() {
         CustomerBillsTable.setRowHeight(30);
@@ -32,13 +36,38 @@ public class CustomerBillDetails {
                     JOptionPane.showMessageDialog(null,"row selected is : " + selectedRow);
                     String billNo = (String)CustomerBillsTable.getValueAt(selectedRow,1);
                     BillContent bc = new BillContent();
-                    bc.make(billNo);
+                    bc.make(billNo, name, email);
+                    frame.dispose();
                     CustomerBillsTable.getSelectionModel().clearSelection();
 
                 }
             }
         });
 
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdminPanel ap = new AdminPanel();
+                //ap.make();
+                frame.dispose();
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CustomerList cl = new CustomerList();
+                cl.make();
+                frame.dispose();
+            }
+        });
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginPanel lp = new LoginPanel();
+                //lp.make();
+                frame.dispose();
+            }
+        });
     }
 
     private void viewBills() {
@@ -73,7 +102,7 @@ public class CustomerBillDetails {
         return table;
     }
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Customer Bills Panel");
+        frame = new JFrame("Customer Bills Panel");
         frame.setContentPane(new CustomerBillDetails().CustomerBills);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -91,7 +120,7 @@ public class CustomerBillDetails {
         this.email = email;
         viewBills();
         System.out.println("inside make of customer bill details");
-        JFrame frame = new JFrame("Customer Bills");
+        frame = new JFrame("Customer Bills");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setContentPane(this.CustomerBills);

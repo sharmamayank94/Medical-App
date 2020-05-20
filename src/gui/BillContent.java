@@ -5,6 +5,8 @@ import pojo.billPojo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -16,9 +18,36 @@ public class BillContent {
     private JButton logoutButton;
     private JButton backButton;
     private String billNo;
+    private String name;
+    private String email;
+    private static  JFrame frame;
 
     public BillContent() {
         billContentTable.setRowHeight(25);
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdminPanel ap = new AdminPanel();
+                //ap.make();
+                frame.dispose();
+            }
+        });
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginPanel lp = new LoginPanel();
+                //lp.make();
+                frame.dispose();
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CustomerBillDetails cbd = new CustomerBillDetails();
+                cbd.make(name,email);
+                frame.dispose();
+            }
+        });
     }
 
     public static JTable createTable(){
@@ -35,7 +64,7 @@ public class BillContent {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Bill content");
+        frame = new JFrame("Bill content");
         frame.setContentPane(new BillContent().billContentPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -48,10 +77,12 @@ public class BillContent {
         billContentSp = new JScrollPane(billContentTable);
     }
 
-    public void make(String billNo) {
+    public void make(String billNo, String name, String email) {
         this.billNo = billNo;
+        this.name = name;
+        this.email = email;
         viewBillDetails(billNo);
-        JFrame frame = new JFrame("Bill details");
+        frame = new JFrame("Bill details");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setContentPane(this.billContentPanel);

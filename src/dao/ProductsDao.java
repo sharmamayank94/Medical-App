@@ -3,6 +3,7 @@ package dao;
 import dbutil.DBConnection;
 import pojo.ProductPojo;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,5 +57,16 @@ public class ProductsDao {
         }
 
         return medQuantity;
+    }
+
+    public static ArrayList<String> getLowStockItem(JTable billtable) throws SQLException {
+        Statement st = DBConnection.getConnection().createStatement();
+        String s = "select DISTINCT(Name), category from medicine where X_Factor=0";
+        ResultSet rs = st.executeQuery(s);
+        ArrayList<String> list = new ArrayList<>();
+         while(rs.next()){
+             list.add(rs.getString(1) + " " + rs.getString(2));
+         }
+         return list;
     }
 }

@@ -159,6 +159,7 @@ public class billDao {
                     break;
                 }
             }
+            System.out.println("batch of medicine is : "+batch);
             PreparedStatement pst1 = DBConnection.getConnection().prepareStatement("insert into bill(Bill_No,Medicine_Name,Customer,Doctor,Category,Date,Batch_No,Bill_Quantity,Rate,Discount,Amount,Email,Phone_No) values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
             pst1.setString(1,billno);
             pst1.setString(2,medicine);
@@ -177,18 +178,19 @@ public class billDao {
             result = pst1.executeUpdate();
         }
         if(result==1){
-            JOptionPane.showMessageDialog(null,"bill added successfully");
+            //JOptionPane.showMessageDialog(null,"bill added successfully");
         }
     }
 
     public static billPojo getDetailsBasedOnMedicine(String name, String category, String quantity) throws SQLException {
-        PreparedStatement pst = DBConnection.getConnection().prepareStatement("select Small_Description,MRP,Selling_Price,NO_Of_Leaves_Per_Pack,No_Of_Medicines_Per_Strip,tax,Total_Quantity,Batch_No from medicine where Name=? and Category=?");
+        PreparedStatement pst = DBConnection.getConnection().prepareStatement("select Small_Description,MRP,Selling_Price,NO_Of_Leaves_Per_Pack,No_Of_Medicines_Per_Strip,tax,Total_Quantity,Batch_No,Expiry from medicine where Name=? and Category=?");
         pst.setString(1,name);
         pst.setString(2,category);
         ResultSet rs = pst.executeQuery();
         billPojo b = new billPojo();
         b.setQuantity(0);
         while(rs.next()){
+
             if(rs.getInt(7)>=Integer.parseInt(quantity)){
                 b.setDescription(rs.getString(1));
                 b.setMrp(rs.getInt(2));
@@ -198,6 +200,7 @@ public class billDao {
                 b.setTax(rs.getDouble(6));
                 b.setQuantity(rs.getInt(7));
                 b.setBatchno(rs.getString(8));
+                b.setExpiry(rs.getDate(9));
                 break;
             }
         }
@@ -220,8 +223,8 @@ public class billDao {
         ResultSet rs = ps.executeQuery();
         Customer c = new Customer();
         if(rs.next()){
-            c.setEmail(rs.getString(4));
-            c.setAddress(rs.getString(3));
+            c.setEmail(rs.getString(5));
+            c.setAddress(rs.getString(4));
         }
         return c;
     }
@@ -250,5 +253,30 @@ public class billDao {
             pst.setString(4, (String) billtable.getValueAt(i,2));
             pst.executeUpdate();
         }
+    }
+
+    public static ArrayList<billPojo> checkItem(JTable billtable) throws SQLException {
+        int rows = billtable.getRowCount();
+        ArrayList<billPojo> items = new ArrayList<>();
+        for(int i=0; i<rows; i++){
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement("select X_Factor, Total_Quantity from medicine where Name=? and Category=?");
+            ps.setString(1, (String)billtable.getValueAt(i, 1));
+            ps.setString(2, (String)billtable.getValueAt(i, 2));
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                int x_factor = rs.getInt(1);
+                billPojo bp = new billPojo();
+                if(x_factor == 0){
+                    int quantity = rs.getInt(2);
+                    bp.setMedicine((String) billtable.getValueAt(i, 1));
+                    bp.setCategory((String) billtable.getValueAt(i, 2));
+                    bp.setQuantity(quantity);
+                    items.add(bp);
+                }
+
+            }
+        }
+        return items;
+
     }
 }

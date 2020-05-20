@@ -1,5 +1,6 @@
 package gui;
 
+import dao.ProductsDao;
 import dao.billDao;
 import pojo.Customer;
 import pojo.billPojo;
@@ -12,15 +13,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.TableView;
 
@@ -47,17 +41,15 @@ public class Bill {
     private JButton homeButton;
     private JButton backButton;
     private JButton resetEntriesButton;
+    private static JFrame frame;
+    private boolean isOpen;
     private JTextField textbox = new JTextField();
     private int a=0;
-//    Set<String> s;
+    private String user;
+
     private ArrayList<String> categoriesArray;
     public Bill() {
-//        s = new TreeSet<>();
-//        s.add("crocin");
-//        s.add("torex");
-//        s.add("taxinn");
-//        s.add("novalgin");
-//        s.add("combiflam");
+
         txtvalue.setEditable(false);
         billNo.setEditable(false);
         txtdate.setEditable(false);
@@ -69,9 +61,12 @@ public class Bill {
         showBillNo();
         showdate();
         billtable.getColumn("S_No").setMaxWidth(50);
-        billtable.getColumn("Name").setMinWidth(300);
-        billtable.getColumn("Description").setMinWidth(300);
+        billtable.getColumn("Name").setMinWidth(280);
+        billtable.getColumn("Description").setMinWidth(250);
         billtable.getColumn("Discount(in %)").setMinWidth(100);
+        billtable.getColumn("SGST").setMaxWidth(50);
+        billtable.getColumn("CGST").setMaxWidth(50);
+
 
         //To add combo box to Category Column
         try {
@@ -80,6 +75,7 @@ public class Bill {
             TableColumn Medicinecategory = billtable.getColumnModel().getColumn(2);
             for (String s : categoriesArray) {
                 combo.addItem(s);
+                System.out.println(s);
             }
             Medicinecategory.setCellEditor(new DefaultCellEditor(combo));
         } catch (SQLException e) {
@@ -163,7 +159,6 @@ public class Bill {
                         String quantity = (String) billtable.getModel().getValueAt(i,3);
                         double rate;
                         double tax;
-
                         if (name.length() > 0 && category.length() > 0) {
                             System.out.println(name + " " + category);
                             System.out.println("ready for row : " + i);
@@ -174,7 +169,8 @@ public class Bill {
 //
                                 if(b.getQuantity()==0) {
                                     JOptionPane.showMessageDialog(null,   name + " " + category + " is not available in stock ");
-
+                                    billtable.getModel().setValueAt("",i,1);
+                                    billtable.getModel().setValueAt("",i,2);
                                     billtable.getModel().setValueAt("",i,3);
                                     billtable.getModel().setValueAt("",i,4);
                                     billtable.getModel().setValueAt("",i,5);
@@ -190,45 +186,62 @@ public class Bill {
 
                             //when quantity is entered, it is checked whether sufficient quantity of same batch is available in stock or not
                                 if(quantity.length()>0) {
-                                    billPojo bp = billDao.getDetailsBasedOnMedicine(name, category, quantity);
-                                    if (bp.getQuantity() >= Integer.parseInt(quantity)) {
-                                        billtable.getModel().setValueAt(bp.getDescription(), i, 4);
-                                        billtable.getModel().setValueAt(String.format("%.2f", bp.getMrp() / bp.getNoOfMedicinesPerStrip()), i, 6);
-                                        billtable.getModel().setValueAt(String.format("%.2f", bp.getRate() / bp.getNoOfMedicinesPerStrip()), i, 8);
-                                        billtable.getModel().setValueAt(bp.getTax() + "%", i, 9);
-                                        billtable.getModel().setValueAt(bp.getTax() + "%", i, 10);
-                                        billtable.getModel().setValueAt(String.format("%.2f", 100 * (1 - (bp.getRate() / bp.getMrp()))) + "%", i, 7);
-                                        rate = bp.getRate() / bp.getNoOfMedicinesPerStrip();
-                                        tax = bp.getTax();
+                                    try {
+                                        Integer.parseInt(quantity);
 
-                                        double netCgst = 0;
-                                        double netSgst = 0;
-                                        double grossAm = 0;
-                                        double netAm = 0;
-                                        System.out.println("quantity : " + quantity);
-                                        int quant = Integer.parseInt(quantity);
-                                        double price = quant * rate;
-                                        double taxrate = price * tax * 0.02;
-                                        billtable.getModel().setValueAt(String.format("%.2f", price + taxrate), i, 11);
+
+                                        billPojo bp = billDao.getDetailsBasedOnMedicine(name, category, quantity);
+                                        if (bp.getQuantity() >= Integer.parseInt(quantity)) {
+                                            billtable.getModel().setValueAt(bp.getDescription(), i, 4);
+                                            billtable.getModel().setValueAt(String.format("%.2f", bp.getMrp() / bp.getNoOfMedicinesPerStrip()), i, 6);
+                                            billtable.getModel().setValueAt(String.format("%.2f", bp.getRate() / bp.getNoOfMedicinesPerStrip()), i, 8);
+                                            billtable.getModel().setValueAt(bp.getTax() + "%", i, 9);
+                                            billtable.getModel().setValueAt(bp.getTax() + "%", i, 10);
+                                            billtable.getModel().setValueAt(String.format("%.2f", 100 * (1 - (bp.getRate() / bp.getMrp()))) + "%", i, 7);
+                                            billtable.getModel().setValueAt(bp.getBatchno(), i , 12);
+                                            billtable.getModel().setValueAt(bp.getExpiry(),i,13);
+                                            rate = bp.getRate() / bp.getNoOfMedicinesPerStrip();
+                                            tax = bp.getTax();
+
+                                            double netCgst = 0;
+                                            double netSgst = 0;
+                                            double grossAm = 0;
+                                            double netAm = 0;
+                                            System.out.println("quantity : " + quantity);
+                                            int quant = Integer.parseInt(quantity);
+                                            double price = quant * rate;
+                                            double taxrate = price * tax * 0.02;
+                                            billtable.getModel().setValueAt(String.format("%.2f", price + taxrate), i, 11);
 //
-                                        for (int j = 0; j < a; j++) {
-                                            if (billtable.getValueAt(j, 3) != "" && billtable.getValueAt(j, 11) != "" && billtable.getValueAt(j,8)!="") {
-                                                int quantityAtRowToRemove = Integer.parseInt((String) billtable.getValueAt(j, 3));
-                                                double rateOfNewRow = Double.parseDouble((String) billtable.getValueAt(j, 8));
-                                                double taxOfNewRow = Double.parseDouble(((String) billtable.getValueAt(j, 9)).substring(0, 3));
-                                                double taxRateToIncrease = quantityAtRowToRemove * rateOfNewRow * taxOfNewRow * 0.01;
-                                                double amountAtNewRow = Double.parseDouble((String) billtable.getValueAt(j, 11));
-                                                grossAm += rateOfNewRow * quantityAtRowToRemove;
-                                                netCgst += taxRateToIncrease;
-                                                netSgst += taxRateToIncrease;
-                                                netAm += amountAtNewRow;
+                                            for (int j = 0; j < a; j++) {
+                                                if (billtable.getValueAt(j, 3) != "" && billtable.getValueAt(j, 11) != "" && billtable.getValueAt(j, 8) != "") {
+                                                    int quantityAtRowToRemove = Integer.parseInt((String) billtable.getValueAt(j, 3));
+                                                    double rateOfNewRow = Double.parseDouble((String) billtable.getValueAt(j, 8));
+                                                    double taxOfNewRow = Double.parseDouble(((String) billtable.getValueAt(j, 9)).substring(0, 3));
+                                                    double taxRateToIncrease = quantityAtRowToRemove * rateOfNewRow * taxOfNewRow * 0.01;
+                                                    double amountAtNewRow = Double.parseDouble((String) billtable.getValueAt(j, 11));
+                                                    grossAm += rateOfNewRow * quantityAtRowToRemove;
+                                                    netCgst += taxRateToIncrease;
+                                                    netSgst += taxRateToIncrease;
+                                                    netAm += amountAtNewRow;
+                                                }
                                             }
+                                            grossAmount.setText(String.valueOf(String.format("%.2f", grossAm)));
+                                            NetAmount.setText(String.valueOf(String.format("%.2f", netAm)));
+                                            totalCgst.setText(String.valueOf(String.format("%.2f", netCgst)));
+                                            totalSgst.setText(String.valueOf(String.format("%.2f", netSgst)));
+                                        } else {
+                                            billtable.getModel().setValueAt("", i, 3);
+                                            billtable.getModel().setValueAt("", i, 6);
+                                            billtable.getModel().setValueAt("", i, 7);
+                                            billtable.getModel().setValueAt("", i, 8);
+                                            billtable.getModel().setValueAt("", i, 9);
+                                            billtable.getModel().setValueAt("", i, 10);
+                                            billtable.getModel().setValueAt("", i, 11);
+                                            JOptionPane.showMessageDialog(null, "Maximum stock for " + name + " " + category + "is : " + b.getQuantity());
                                         }
-                                        grossAmount.setText(String.valueOf(String.format("%.2f", grossAm)));
-                                        NetAmount.setText(String.valueOf(String.format("%.2f", netAm)));
-                                        totalCgst.setText(String.valueOf(String.format("%.2f", netCgst)));
-                                        totalSgst.setText(String.valueOf(String.format("%.2f", netSgst)));
-                                    } else {
+                                    } catch (NumberFormatException ex) {
+                                        JOptionPane.showMessageDialog(null,"Enter quantity in digits");
                                         billtable.getModel().setValueAt("", i, 3);
                                         billtable.getModel().setValueAt("", i, 6);
                                         billtable.getModel().setValueAt("", i, 7);
@@ -236,9 +249,14 @@ public class Bill {
                                         billtable.getModel().setValueAt("", i, 9);
                                         billtable.getModel().setValueAt("", i, 10);
                                         billtable.getModel().setValueAt("", i, 11);
-                                        JOptionPane.showMessageDialog(null,"Maximum stock for " + name + " "+ category + "is : " + b.getQuantity());
+
+                                    } catch (SQLException ex) {
+                                        ex.printStackTrace();
+                                    } catch (HeadlessException ex) {
+                                        ex.printStackTrace();
                                     }
                                 }
+
                             } catch (SQLException ex) {
                                 JOptionPane.showMessageDialog(null, "My SQL Exception");
                                 return;
@@ -262,10 +280,10 @@ public class Bill {
                 String email = txtEmail.getText();
                 String doctor = txtDoctor.getText();
                 String billno = billNo.getText();
-                String date = txtdate.getText();
+                 String date = txtdate.getText();
                 int noOfRows = billtable.getModel().getRowCount();
                 if(validateInputs(noOfRows,Customer,phone,doctor)){
-                    JOptionPane.showMessageDialog(null,"All good");
+
                     try {
                         billDao.addCustomer(Customer,phone,address,email);  //To add customer to customer table in database
                     } catch (SQLException ex) {
@@ -282,12 +300,16 @@ public class Bill {
                         ex.printStackTrace();
                         return;
                     }
+                    try {
+                        billDao.reduceMedicines(billtable);    //To reduce items from stock(Medicine table in database)
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    showNotification(billtable);
                 }
-                try {
-                    billDao.reduceMedicines(billtable);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+
+
+
                 showBillNo();
                 showdate();
             }
@@ -300,6 +322,10 @@ public class Bill {
                 txtAddress.setText("");
                 txtDoctor.setText("");
                 txtEmail.setText("");
+                grossAmount.setText("");
+                NetAmount.setText("");
+                totalCgst.setText("");
+                totalSgst.setText("");
                 DefaultTableModel dm = (DefaultTableModel)billtable.getModel();
                 int i = billtable.getRowCount();
                 for (int j = i - 1; j >= 0; j--) {
@@ -314,6 +340,9 @@ public class Bill {
             public void focusLost(FocusEvent e) {
                 System.out.println("Focus lost of Customer name");
                 String customerName = txtCustomerName.getText();
+                if(!customerName.isEmpty()) {
+                    txtCustomerName.setText(customerName.substring(0, 1).toUpperCase() + customerName.substring(1));
+                }
                 String customerPhone = txtPhone.getText();
                 if(!customerName.isEmpty() || !customerPhone.isEmpty()) {
                     try {
@@ -333,16 +362,18 @@ public class Bill {
             public void focusLost(FocusEvent e) {
                 String customerName = txtCustomerName.getText();
                 String customerPhone = txtPhone.getText();
-                try {
-                    Double.parseDouble(customerPhone);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null,"only digits should be entered in phone no field");
-                    txtPhone.setText("");
-                }
-
                 if(customerPhone.length()!=10){
                     JOptionPane.showMessageDialog(null,"Phone no should be of 10 digits");
                 }
+                else {
+                    try {
+                        Double.parseDouble(customerPhone);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "only digits should be entered in phone no field");
+                        txtPhone.setText("");
+                    }
+                }
+
 
                 if(!customerName.isEmpty() || !customerPhone.isEmpty()) {
                     try {
@@ -468,13 +499,96 @@ public class Bill {
 //                }
 //            }
 //        });
+
+        txtDoctor.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txtDoctor.getText() != "") {
+                    String docname = txtDoctor.getText();
+                    docname = docname.trim();
+                    String[] a = docname.split(" ");
+                    String doc = "";
+                    if (a[0].equalsIgnoreCase("dr") || a[0].equalsIgnoreCase("dr.")) {
+                        doc += "DR.  ";
+                        for (int i = 1; i < a.length; i++) {
+                            doc += (a[i].substring(0, 1).toUpperCase() + a[i].substring(1)) + " ";
+                        }
+                    } else {
+                        doc += "DR.  ";
+                        for (int i = 0; i < a.length; i++) {
+                            doc += (a[i].substring(0, 1).toUpperCase() + a[i].substring(1)) + " ";
+                        }
+                    }
+                    txtDoctor.setText(doc);
+                }
+            }
+        });
+        txtAddress.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(txtAddress.getText().length()>0){
+                    String add = txtAddress.getText();
+                    txtAddress.setText(add.substring(0,1).toUpperCase() + add.substring(1));
+                }
+            }
+        });
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                notify n = new notify();
-                n.showToast();
+                if(user=="admin"){
+                    AdminPanel ap = new AdminPanel();
+                    //ap.make();
+                    frame.dispose();
+                }
+                else if(user=="other"){
+                    //UserPanel up = new UserPanel();
+                    //up.make();
+                    frame.dispose();
+                }
+
+            }
+
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(user=="admin"){
+                    AdminPanel ap = new AdminPanel();
+                    //ap.make();
+                    frame.dispose();
+                }
+                else if(user=="other"){
+                    //UserPanel up = new UserPanel();
+                    //up.make();
+                    frame.dispose();
+                }
             }
         });
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginPanel lp = new LoginPanel();
+                //lp.make();
+                frame.dispose();
+            }
+        });
+    }
+
+    private void showNotification(JTable billtable) {
+        try {
+            ArrayList<billPojo> list = billDao.checkItem(billtable);
+            if(list.size()>0){
+                musicStuff m = new musicStuff();
+                String musicPath = "src/gui/music/insight.wav";
+
+                notification2 n = new notification2();
+                m.playMusic(musicPath);
+                n.make(list);
+
+            }
+        } catch (SQLException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -520,7 +634,7 @@ public class Bill {
 //code to insert new row
     private void insertRow(int a) {
         DefaultTableModel model = (DefaultTableModel)billtable.getModel();
-        model.addRow(new Object[]{a,"","","","","","","","","",""});
+        model.addRow(new Object[]{a,"","","","","","","","","","","",""});
     }
 //code to show current date
     private void showdate() {
@@ -555,7 +669,7 @@ public class Bill {
         DefaultTableModel model = new DefaultTableModel(){
 
             public boolean isCellEditable(int row,int column)  {
-                if (column == 0||column==6||column==7||column==8||column==9||column==10||column==11)  return false;
+                if (column == 0||column==6||column==7||column==8||column==9||column==10||column==11||column==12||column==13)  return false;
                 return true;
             }
         };
@@ -571,6 +685,8 @@ public class Bill {
         model.addColumn("CGST");
         model.addColumn("SGST");
         model.addColumn("Amount");
+        model.addColumn("Batch no");
+        model.addColumn("Expiry Date");
         JTable table = new JTable(model);
         table.setFillsViewportHeight(true);
         return table;
@@ -581,7 +697,7 @@ public class Bill {
         SwingUtilities.invokeLater(new Runnable() {
         @Override
         public void run() {
-            JFrame frame = new JFrame("BILL GENERATION");
+            frame = new JFrame("BILL GENERATION");
 
             frame.setContentPane(new Bill().toppanel);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -589,6 +705,7 @@ public class Bill {
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
+
         }
     });
 
@@ -608,5 +725,15 @@ public class Bill {
 
 //        frame.pack();
 //        frame.setVisible(true);
+    }
+
+    public void make(String user){
+        this.user = user;
+        System.out.println("Opening Bill frame");
+        frame = new JFrame("Generate Bill");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setContentPane(this.toppanel);
+        frame.setVisible(true);
     }
 }

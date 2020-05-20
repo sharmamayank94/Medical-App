@@ -25,6 +25,7 @@ public class CustomerList {
     private JButton homeButton;
     private JButton logoutButton;
     private JComboBox cbname;
+    private static  JFrame frame;
     Set<String> s;
 
     public CustomerList() {
@@ -45,6 +46,7 @@ public class CustomerList {
                     String email = (String)CustomerTable.getValueAt(selectedRow,2);
                     CustomerBillDetails cbd = new CustomerBillDetails();
                     cbd.make(name,email);
+                    frame.dispose();
                     CustomerTable.getSelectionModel().clearSelection();
 
                 }
@@ -108,7 +110,7 @@ public class CustomerList {
                         }
                         System.out.println(to_check);
                         System.out.println(check_from_data);
-                        if (check_from_data.equals(to_check)) {
+                        if (check_from_data.equalsIgnoreCase(to_check)) {
                             ((JTextComponent) cbname.getEditor().getEditorComponent()).setText(data);
                             ((JTextComponent) cbname.getEditor().getEditorComponent()).setSelectionStart(to_check_len);
                             ((JTextComponent) cbname.getEditor().getEditorComponent()).setSelectionEnd(data.length());
@@ -116,6 +118,30 @@ public class CustomerList {
                         }
                     }
                 }
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdminPanel ap = new AdminPanel();
+                //ap.make();
+                frame.dispose();
+            }
+        });
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdminPanel ap = new AdminPanel();
+                //ap.make();
+                frame.dispose();
+            }
+        });
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginPanel lp = new LoginPanel();
+                //lp.make();
+                frame.dispose();
             }
         });
     }
@@ -270,7 +296,7 @@ public class CustomerList {
     public static void main(String[] args)
     {
 
-        JFrame frame = new JFrame("Customers List");
+        frame = new JFrame("Customers List");
         frame.setContentPane(new CustomerList().CustomerPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -286,9 +312,7 @@ public class CustomerList {
 
 
     public void make(){
-
-
-        JFrame frame = new JFrame("Customers List");
+        frame = new JFrame("Customers List");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setContentPane(this.CustomerPanel);

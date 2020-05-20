@@ -22,6 +22,7 @@ public class AddVendor {
     private JButton backButton;
     private JButton logoutButton;
     private JLabel vendorimg;
+    private static JFrame frame;
 
     public AddVendor() {
         ImageIcon imageIcon = new ImageIcon("src/gui/Images/vendor.jpg"); // load the image to a imageIcon
@@ -90,13 +91,30 @@ public class AddVendor {
             public void actionPerformed(ActionEvent e) {
                 VendorsList vl = new VendorsList();
                 vl.make();
+                frame.dispose();
+            }
+        });
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdminPanel ap = new AdminPanel();
+                //ap.make();
+                frame.dispose();
+            }
+        });
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginPanel lp = new LoginPanel();
+                //lp.make();
+                frame.dispose();
             }
         });
     }
 
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("VendorDetail");
+        frame = new JFrame("VendorDetail");
         frame.setContentPane(new AddVendor().MainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -107,7 +125,7 @@ public class AddVendor {
     }
 
     public void make() {
-        JFrame frame = new JFrame("Add Vendor Frame");
+        frame = new JFrame("Add Vendor Frame");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 

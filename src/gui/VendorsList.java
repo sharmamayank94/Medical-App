@@ -22,6 +22,7 @@ public class VendorsList {
     private JButton addNewVendorButton;
     private JPanel vendorListPanel;
     private JScrollPane vendorListSP;
+    private static JFrame frame;
 
     public VendorsList() {
         vendorListTable.getColumn("S_No").setMaxWidth(50);
@@ -47,7 +48,7 @@ public class VendorsList {
                     String agency = (String)vendorListTable.getValueAt(selectedRow,2);
                     UpdateVendor uv = new UpdateVendor();
                     uv.make(name,agency);
-
+                    frame.dispose();
                 }
             }
         });
@@ -57,9 +58,34 @@ public class VendorsList {
             public void actionPerformed(ActionEvent e) {
                 AddVendor av = new AddVendor();
                 av.make();
+                frame.dispose();
             }
         });
 
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdminPanel ap = new AdminPanel();
+                //ap.make();
+                frame.dispose();
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdminPanel ap = new AdminPanel();
+                //ap.make();
+                frame.dispose();
+            }
+        });
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginPanel lp = new LoginPanel();
+                //lp.make();
+                frame.dispose();
+            }
+        });
     }
 
     private void viewVendors() {
@@ -82,7 +108,7 @@ public class VendorsList {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Vendors List");
+        frame = new JFrame("Vendors List");
         frame.setContentPane(new VendorsList().vendorListPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -114,7 +140,7 @@ public class VendorsList {
     }
 
     public void make() {
-        JFrame frame = new JFrame("Vendors List Frame");
+        frame = new JFrame("Vendors List Frame");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 

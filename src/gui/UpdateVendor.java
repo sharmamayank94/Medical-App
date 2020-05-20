@@ -25,6 +25,7 @@ public class UpdateVendor {
     private JLabel vendorimg;
     private String agency;
     private String name;
+    private static JFrame frame;
 
     public UpdateVendor() {
         ImageIcon imageIcon = new ImageIcon("src/gui/Images/vendor.jpg"); // load the image to a imageIcon
@@ -80,13 +81,29 @@ public class UpdateVendor {
             public void actionPerformed(ActionEvent e) {
                 VendorsList vl = new VendorsList();
                 vl.make();
-
+                frame.dispose();
+            }
+        });
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdminPanel ap = new AdminPanel();
+                //ap.make();
+                frame.dispose();
+            }
+        });
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginPanel lp = new LoginPanel();
+                //lp.make();
+                frame.dispose();
             }
         });
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Update Vendor");
+        frame = new JFrame("Update Vendor");
         frame.setContentPane(new UpdateVendor().updateVendor);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -100,7 +117,7 @@ public class UpdateVendor {
         this.name = name;
         this.agency = agency;
         viewVendor();
-        JFrame frame = new JFrame("Update Vendor Frame");
+        frame = new JFrame("Update Vendor Frame");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 

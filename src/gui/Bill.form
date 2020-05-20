@@ -366,7 +366,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <text value="KYA KRNA HAI YHA&#10;BS SAVE KRNE KO BOLA&#10;SPACE"/>
+                  <text value=""/>
                 </properties>
               </component>
               <component id="4d64e" class="javax.swing.JTextField" binding="txtvalue">
