@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.notification2">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="0">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="500" height="500"/>
+    </constraints>
+    <properties>
+      <background color="-885393"/>
+      <maximumSize width="500" height="300"/>
+      <minimumSize width="500" height="200"/>
+      <opaque value="false"/>
+      <preferredSize width="500" height="200"/>
+    </properties>
+    <border type="bevel-raised" title="ALERT!">
+      <font name="Droid Sans Mono" size="16" style="1"/>
+      <title-color color="-3658980"/>
+    </border>
+    <children>
+      <component id="a9372" class="javax.swing.JTextPane" binding="youAreGettingShortageTextPane" default-binding="true">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-3658980"/>
+          <editable value="false"/>
+          <font name="JetBrains Mono" size="14" style="1"/>
+          <foreground color="-855310"/>
+          <text value="You are getting shortage of some items. They will be added to orders section. Order them as soon as possible."/>
+        </properties>
+      </component>
+      <scrollpane id="1ca17" binding="itemlistSp">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-885393"/>
+          <foreground color="-1867149"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="cd7fb" class="javax.swing.JTable" binding="itemList" custom-create="true">
+            <constraints/>
+            <properties>
+              <background color="-885393"/>
+              <font name="Consolas" size="14" style="1"/>
+              <foreground color="-855310"/>
+              <gridColor color="-885393"/>
+              <opaque value="true"/>
+              <showHorizontalLines value="false"/>
+              <showVerticalLines value="false"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <component id="10132" class="javax.swing.JButton" binding="OKButton" default-binding="true">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-3658980"/>
+          <foreground color="-855310"/>
+          <text value="OK"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
