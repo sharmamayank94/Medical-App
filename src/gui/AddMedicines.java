@@ -5,10 +5,7 @@ import pojo.ProductPojo;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.Calendar;
 
@@ -42,7 +39,7 @@ public class AddMedicines {
     private JLabel noOfPacksLabel;
     private JLabel medicinesPerLeafLabel;
     private   JScrollPane scroller;
-
+    private static JFrame frame;
     private boolean isProductAdded;
 
     AddMedicines(){
@@ -164,10 +161,43 @@ public class AddMedicines {
                 }
             }
         });
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                LoginPanel lp = new LoginPanel();
+                lp.make();
+                frame.dispose();
+            }
+        });
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                AdminPanel ap = new AdminPanel();
+                ap.make();
+                frame.dispose();
+            }
+        });
+        noOfMedicinesTextField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                noOfMedicinesTextField.setText("");
+            }
+        });
+
+        noOfMedicinesTextField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                super.focusLost(e);
+                if(noOfMedicinesTextField.getText().equals("")){
+                    noOfMedicinesTextField.setText("Only those not included in pack");
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {
-          JFrame  frame = new JFrame("Add Medicines");
+          frame = new JFrame("Add Medicines");
           JTextArea jta = new JTextArea(10, 10);
         JScrollPane scrol = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -203,12 +233,10 @@ public class AddMedicines {
         this.nameTextField.setText(name);
         this.vendorTextField.setText(vendor);
         this.companyTextField.setText(company);
-
-
     }
 
     public void make() {
-        JFrame frame = new JFrame("Add Products");
+        frame = new JFrame("Add Products");
         frame.setContentPane(mainpanel);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
