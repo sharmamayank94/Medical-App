@@ -3,6 +3,7 @@ package dao;
 import com.sun.jdi.ClassNotPreparedException;
 import dbutil.DBConnection;
 import pojo.OrderPojo;
+import pojo.billPojo;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -149,5 +150,40 @@ public class OrdersDao {
         int result = s.executeUpdate("Delete from orders where OrderId = '"+orderId+"'");
         System.out.println(result);
         return result>0;
+    }
+
+    public static void addOrderOfNotification(ArrayList<billPojo> list) throws SQLException {
+        ArrayList<OrderPojo> ord = getOrders();
+        for(billPojo bp : list) {
+            boolean found = false;
+            for (OrderPojo item : ord) {
+                System.out.println("name : " + item.getName());
+                if (item.getName().equalsIgnoreCase(bp.getMedicine())) {
+                    System.out.println("found name : " + item.getName());
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                String ordid = getNewOrderId();
+                PreparedStatement pst = DBConnection.getConnection().prepareStatement("select Company, Vendor from medicine where Name=?");
+                pst.setString(1, bp.getMedicine());
+                ResultSet rs = pst.executeQuery();
+                String company = "";
+                String vendor = "";
+                if(rs.next()){
+                    company = rs.getString(1);
+                    vendor = rs.getString(2);
+                }
+                PreparedStatement ps = DBConnection.getConnection().prepareStatement("insert into orders(OrderId, Name, Company, Vendor, Status) values (?,?,?,?,?)");
+                ps.setString(1,ordid);
+                ps.setString(2, bp.getMedicine());
+                ps.setString(3, company);
+                ps.setString(4, vendor);
+                ps.setString(5, "Unordered");
+
+                ps.executeUpdate();
+            }
+        }
     }
 }

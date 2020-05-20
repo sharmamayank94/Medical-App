@@ -43,7 +43,12 @@ public class notification2 {
         OKButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 frame.dispose();
+                tm2.stop();
+                tm1.stop();
+                tm.stop();
+                return;
             }
         });
 
@@ -60,6 +65,9 @@ public class notification2 {
                 float opacity = frame.getOpacity();
                 if(frame.getOpacity()<=0.3){
                     frame.dispose();
+                    tm2.stop();
+                    tm1.stop();
+                    tm.stop();
                     return;
                 }
                 frame.setOpacity((float) (opacity-0.2));
@@ -74,6 +82,9 @@ public class notification2 {
                 float opacity = frame.getOpacity();
                 if(frame.getOpacity()<=0.3){
                     frame.dispose();
+                    tm2.stop();
+                    tm1.stop();
+                    tm.stop();
                     return;
                 }
                 frame.setOpacity((float) (opacity-0.2));
@@ -89,6 +100,7 @@ public class notification2 {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setUndecorated(true);
         frame.pack();
+        frame.setOpacity(1);
         frame.setLocation(200,500);
         frame.setVisible(true);
 
@@ -107,6 +119,7 @@ public class notification2 {
         //frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500,200);
         frame.setLocation(200,500);
+        frame.setOpacity(1);
         frame.setVisible(true);
         tm.start();
     }

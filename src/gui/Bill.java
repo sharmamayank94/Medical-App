@@ -1,5 +1,6 @@
 package gui;
 
+import dao.OrdersDao;
 import dao.ProductsDao;
 import dao.billDao;
 import pojo.Customer;
@@ -537,11 +538,11 @@ public class Bill {
             public void actionPerformed(ActionEvent e) {
                 if(user=="admin"){
                     AdminPanel ap = new AdminPanel();
-                    //ap.make();
+                    ap.make();
                     frame.dispose();
                 }
                 else if(user=="other"){
-                    //UserPanel up = new UserPanel();
+                    UserPanel up = new UserPanel();
                     //up.make();
                     frame.dispose();
                 }
@@ -554,11 +555,11 @@ public class Bill {
             public void actionPerformed(ActionEvent e) {
                 if(user=="admin"){
                     AdminPanel ap = new AdminPanel();
-                    //ap.make();
+                    ap.make();
                     frame.dispose();
                 }
                 else if(user=="other"){
-                    //UserPanel up = new UserPanel();
+                    UserPanel up = new UserPanel();
                     //up.make();
                     frame.dispose();
                 }
@@ -568,7 +569,7 @@ public class Bill {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoginPanel lp = new LoginPanel();
-                //lp.make();
+                lp.make();
                 frame.dispose();
             }
         });
@@ -584,7 +585,7 @@ public class Bill {
                 notification2 n = new notification2();
                 m.playMusic(musicPath);
                 n.make(list);
-
+                OrdersDao.addOrderOfNotification(list);
             }
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();

@@ -263,18 +263,23 @@ public class billDao {
             ps.setString(1, (String)billtable.getValueAt(i, 1));
             ps.setString(2, (String)billtable.getValueAt(i, 2));
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
+            billPojo bp = new billPojo();
+            while(rs.next()) {
                 int x_factor = rs.getInt(1);
-                billPojo bp = new billPojo();
+
+                int quant = 0;
                 if(x_factor == 0){
                     int quantity = rs.getInt(2);
                     bp.setMedicine((String) billtable.getValueAt(i, 1));
                     bp.setCategory((String) billtable.getValueAt(i, 2));
-                    bp.setQuantity(quantity);
-                    items.add(bp);
+                    //bp.setQuantity(quantity);
+                    quant = quant + quantity;
+
                 }
+                bp.setQuantity(quant);
 
             }
+            items.add(bp);
         }
         return items;
 

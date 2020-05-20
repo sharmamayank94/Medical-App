@@ -86,6 +86,22 @@ public class AdminPanel {
                 frame.dispose();
             }
         });
+        vendorInformationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VendorsList vl = new VendorsList();
+                vl.make();
+                frame.dispose();
+            }
+        });
+        customerDetailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CustomerList cl = new CustomerList();
+                cl.make();
+                frame.dispose();
+            }
+        });
     }
 
     public static  void main(String[] args){

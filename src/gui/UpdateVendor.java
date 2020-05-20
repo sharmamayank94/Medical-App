@@ -88,7 +88,7 @@ public class UpdateVendor {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AdminPanel ap = new AdminPanel();
-                //ap.make();
+                ap.make();
                 frame.dispose();
             }
         });
@@ -96,7 +96,7 @@ public class UpdateVendor {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoginPanel lp = new LoginPanel();
-                //lp.make();
+                lp.make();
                 frame.dispose();
             }
         });
