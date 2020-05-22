@@ -1,6 +1,6 @@
 package gui;
 
-import Pojo.ViewStockBean;
+import Pojo.ViewStockPojo;
 import dao.DBconnection;
 
 import javax.swing.*;
@@ -30,8 +30,7 @@ public class CompleteStock {
     private JLabel backLabel;
     private JPanel panel;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
 
         JFrame frame = new JFrame(" My Stock");
         frame.setContentPane(new CompleteStock().topPanel);
@@ -47,19 +46,21 @@ public class CompleteStock {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        fullStock= createTable();
-        Stock= new JScrollPane(fullStock);
+        fullStock = createTable();
+        Stock = new JScrollPane(fullStock);
 
     }
-    public static JTable createTable(){
+
+    public static JTable createTable() {
 
         // String[] columnNames = new String[]{" S_No", "Name", "Category", "Total_Quantity", "Selling_price", "Batch_NO", "Expiry", "Vendor", "Company", "No_Of_Leaves_Per_Pack", "No_Of_Medicines_Per_Strip", "MRP", "Cost_Price", "Small_Description", "X_Factor"};
         // Object[][] data = new Object[][]{};
-        JTable table =new JTable(tableModel());
+        JTable table = new JTable(tableModel());
         table.setFillsViewportHeight(true);
-        return  table ;
+        return table;
 
     }
+
     public void resizeImage(JLabel label, String imagePath, int wid, int ht) {
         ImageIcon img = new ImageIcon(imagePath);
         Image image = img.getImage();
@@ -174,7 +175,7 @@ public class CompleteStock {
                 super.mouseExited(e);
                 resizeImage(backLabel, "src/gui/Icons/backIcon.png", 50, 50);
             }
-                  });
+        });
         backLabel.addMouseListener(new MouseAdapter() {
 
 
@@ -204,7 +205,7 @@ public class CompleteStock {
         fullStock.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if(propertyChangeEvent.getPropertyName().equals("tableCellEditor")) {
+                if (propertyChangeEvent.getPropertyName().equals("tableCellEditor")) {
 //                    System.out.println(table.getValueAt(table.getSelectedRow(),table.getSelectedColumn()));
                     //table.
                 }
@@ -212,36 +213,28 @@ public class CompleteStock {
         });
 
 
-
-
-
     }
 
 
-
-
-
-
-    public static TableModel tableModel()
-    {
+    public static TableModel tableModel() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn(" S_No");
         model.addColumn("Name");
         model.addColumn("Category");
-        model.addColumn( "Total_Quantity");
+        model.addColumn("Total_Quantity");
         model.addColumn("Selling_price");
         model.addColumn("Batch_NO");
-        model.addColumn( "Expiry");
+        model.addColumn("Expiry");
         model.addColumn("Vendor");
         model.addColumn("Company");
         model.addColumn("No_Of_Leaves_Per_Pack");
         model.addColumn("No_Of_Medicines_Per_Strip");
-        model.addColumn( "MRP");
+        model.addColumn("MRP");
         model.addColumn("Cost_Price");
         model.addColumn("Small_Description");
         model.addColumn("X_Factor");
 
-        List<ViewStockBean> viewStockBeans = new ArrayList<>();
+        List<ViewStockPojo> viewStockBeans = new ArrayList<>();
         try {
             Statement st = DBconnection.getConnection().createStatement();
             String query = "select \n" +
@@ -260,16 +253,16 @@ public class CompleteStock {
                     "                Small_Description,\n" +
                     "                X_Factor from Medicine";
             ResultSet rs = st.executeQuery(query);
-            int sNo=0;
+            int sNo = 0;
             while (rs.next()) {
                 sNo++;
-                viewStockBeans.add(new ViewStockBean(String.valueOf(sNo), rs.getString(1), rs.getString(2), rs.getInt(3),rs.getInt(4), rs.getString(5), rs.getDate(6),rs.getString(7), rs.getString(8),rs.getInt(9), rs.getInt(10) ,rs.getInt(11),rs.getInt(12),rs.getString(13),rs.getInt(14)));
+                viewStockBeans.add(new ViewStockPojo(String.valueOf(sNo), rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getDate(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getInt(10), rs.getInt(11), rs.getInt(12), rs.getString(13), rs.getInt(14)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         if (!viewStockBeans.isEmpty()) {
-            for (ViewStockBean stock : viewStockBeans) {
+            for (ViewStockPojo stock : viewStockBeans) {
                 model.addRow(stock.getCompanyBasedStockImpl());
             }
 

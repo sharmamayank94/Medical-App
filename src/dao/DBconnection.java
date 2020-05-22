@@ -12,33 +12,33 @@ import java.sql.SQLException;
  */
 
 /**
- *
  * @author DeLL
  */
 public class DBconnection {
     private static Connection conn;
-    static{
+
+    static {
         try {
 //            Class.forName("com.mysql.jdbc.Driver");
             Class.forName("com.mysql.cj.jdbc.Driver");
 //            conn= DriverManager.getConnection("jdbc:mysql:thin:@DESKTOP-QILU182:1521/xe","system","ananya");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/medical","admin","password");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/medical", "admin", "password");
 //            JOptionPane.showMessageDialog(null,"connection done succesfully","success",JOptionPane.INFORMATION_MESSAGE);
 
         } catch (ClassNotFoundException cnfe) {
-            JOptionPane.showMessageDialog(null,"class not found");
-        }
-        catch(SQLException sqle)
-        {
+            JOptionPane.showMessageDialog(null, "class not found");
+        } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(null, "sql exception..");
         }
     }
-    public static Connection getConnection(){
+
+    public static Connection getConnection() {
         return conn;
     }
-    public static void closeConnection(){
+
+    public static void closeConnection() {
         try {
-            if(conn!=null){
+            if (conn != null) {
                 conn.close();
             }
         } catch (SQLException e) {

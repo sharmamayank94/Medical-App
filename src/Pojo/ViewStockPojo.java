@@ -2,7 +2,7 @@ package Pojo;
 
 import java.util.Date;
 
-public class ViewStockBean {
+public class ViewStockPojo {
     private String S_No;
     private String Name;
     private String Category;
@@ -38,7 +38,7 @@ public class ViewStockBean {
                 X_Factor};
     }
 
-    public ViewStockBean(String s_No, String name, String category, int total_Quantity, int selling_price, String batch_NO, Date expiry, String vendor, String company, int no_Of_Leaves_Per_Pack, int no_Of_Medicines_Per_Strip, int MRP, int cost_Price, String small_Description, int x_Factor) {
+    public ViewStockPojo(String s_No, String name, String category, int total_Quantity, int selling_price, String batch_NO, Date expiry, String vendor, String company, int no_Of_Leaves_Per_Pack, int no_Of_Medicines_Per_Strip, int MRP, int cost_Price, String small_Description, int x_Factor) {
         S_No = s_No;
         Name = name;
         Category = category;

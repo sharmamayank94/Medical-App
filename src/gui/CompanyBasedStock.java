@@ -1,7 +1,7 @@
 package gui;
 
-import Utility.Barcode;
 import Pojo.CompanyBasedStockPojo;
+import Utility.Barcode;
 import dao.DBconnection;
 
 import javax.swing.*;
@@ -31,7 +31,7 @@ public class CompanyBasedStock {
     private JLabel backLabel;
     private JButton button1;
     private JComboBox comboBox;
-    private  JTextField searchTab;
+    private JTextField searchTab;
     private JButton completeStockButton;
 
     public void resizeImage(JLabel label, String imagePath, int wid, int ht) {
@@ -147,7 +147,7 @@ public class CompanyBasedStock {
                 super.mouseExited(e);
                 resizeImage(backLabel, "src/gui/Icons/backIcon.png", 50, 50);
             }
-                   });
+        });
         backLabel.addMouseListener(new MouseAdapter() {
 
 
@@ -177,7 +177,7 @@ public class CompanyBasedStock {
         table.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if(propertyChangeEvent.getPropertyName().equals("tableCellEditor")) {
+                if (propertyChangeEvent.getPropertyName().equals("tableCellEditor")) {
 //                    System.out.println(table.getValueAt(table.getSelectedRow(),table.getSelectedColumn()));
                     //table.
                 }
@@ -189,11 +189,12 @@ public class CompanyBasedStock {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    if(table.getSelectedRow() < 0)
-                    JOptionPane.showMessageDialog(null, "Please select medicine to print QR code", "Error", JOptionPane.ERROR_MESSAGE);
-                    else{
-                    Barcode.generateBarCode(table.getValueAt(table.getSelectedRow(),1)+"  "+table.getValueAt(table.getSelectedRow(),2)+" "+ table.getValueAt(table.getSelectedRow(),6) );
-                    JOptionPane.showConfirmDialog(null," Select yes to print QRCode",null,2);}
+                    if (table.getSelectedRow() < 0)
+                        JOptionPane.showMessageDialog(null, "Please select medicine to print QR code", "Error", JOptionPane.ERROR_MESSAGE);
+                    else {
+                        Barcode.generateBarCode(table.getValueAt(table.getSelectedRow(), 1) + "  " + table.getValueAt(table.getSelectedRow(), 2) + " " + table.getValueAt(table.getSelectedRow(), 6));
+                        JOptionPane.showConfirmDialog(null, " Select yes to print QRCode", null, 2);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -239,15 +240,14 @@ public class CompanyBasedStock {
 
         //table.setMaximumSize();
         table.setAutoResizeMode(4);
-        System.out.println( table.getAutoResizeMode());
+        System.out.println(table.getAutoResizeMode());
         table.setModel(tableModel());
-        Font font = new Font(null,Font.BOLD,14);
+        Font font = new Font(null, Font.BOLD, 14);
         table.getTableHeader().setFont(font);
         return table;
     }
 
-    public static TableModel tableModel()
-    {
+    public static TableModel tableModel() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn(" S NO.");
         model.addColumn("Medicine");
@@ -259,26 +259,15 @@ public class CompanyBasedStock {
         model.addColumn("Vendor");
 
 
-
-
-//        TableCellRenderer buttonRenderer = new JTableButtonRenderer();
-//        table.getColumn("Button1").setCellRenderer(buttonRenderer);
-//        table.getColumn("Button2").setCellRenderer(buttonRenderer);
-
-
-
-
-
-
         List<CompanyBasedStockPojo> companyBasedStocks = new ArrayList<>();
         try {
             Statement st = DBconnection.getConnection().createStatement();
             String query = "select Name,Company ,Category,Total_Quantity,Expiry,Batch_NO ,Vendor from Medicine";
             ResultSet rs = st.executeQuery(query);
-            int sNo=0;
+            int sNo = 0;
             while (rs.next()) {
                 sNo++;
-                companyBasedStocks.add(new CompanyBasedStockPojo(sNo, rs.getString(1), rs.getString(2), rs.getInt(4), rs.getDate(5), rs.getString(3), rs.getString(6) ,rs.getString(7)));
+                companyBasedStocks.add(new CompanyBasedStockPojo(sNo, rs.getString(1), rs.getString(2), rs.getInt(4), rs.getDate(5), rs.getString(3), rs.getString(6), rs.getString(7)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -293,12 +282,7 @@ public class CompanyBasedStock {
     }
 
 
-
-
-
-
-    public TableModel searchBar()
-    {
+    public TableModel searchBar() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn(" S NO.");
         model.addColumn("Medicine");
@@ -310,18 +294,12 @@ public class CompanyBasedStock {
         model.addColumn("Vendor");
 
 
-
-
-
-
-
-
         List<CompanyBasedStockPojo> companyBasedStocks = new ArrayList<>();
         try {
 
             String comboBoxSelectedItem = comboBox.getSelectedItem().toString();
             String textBox = searchTab.getText();
-            String query =  null;
+            String query = null;
             switch (comboBoxSelectedItem) {
 
                 case "Company":
@@ -337,30 +315,30 @@ public class CompanyBasedStock {
                     query = "select Name,Company ,Category,Total_Quantity,Expiry,Batch_NO ,Vendor from Medicine where Category like ? ";
                     break;
                 default:
-                    JOptionPane.showMessageDialog( null,"Please select Search criteria");
+                    JOptionPane.showMessageDialog(null, "Please select Search criteria");
                     return tableModel();
 
             }
             PreparedStatement st = DBconnection.getConnection().prepareStatement(query);
 //            st.setString(1,comboBoxSelectedItem);
-            st.setString(1, "%"+textBox+"%");
+            st.setString(1, "%" + textBox + "%");
             ResultSet rs = st.executeQuery();
 
-            int sNo=0;
+            int sNo = 0;
             while (rs.next()) {
                 sNo++;
-                companyBasedStocks.add(new CompanyBasedStockPojo(sNo, rs.getString(1), rs.getString(2), rs.getInt(4), rs.getDate(5), rs.getString(3), rs.getString(6) ,rs.getString(7)));
+                companyBasedStocks.add(new CompanyBasedStockPojo(sNo, rs.getString(1), rs.getString(2), rs.getInt(4), rs.getDate(5), rs.getString(3), rs.getString(6), rs.getString(7)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         if (!companyBasedStocks.isEmpty()) {
             for (CompanyBasedStockPojo stock : companyBasedStocks) {
-//                JButton button = new JButton();
                 model.addRow(stock.getCompanyBasedStockImpl());
             }
         }
         return model;
     }
+
 
 }

@@ -31,9 +31,8 @@ public class CompanyBasedStockPojo {
         this.vendor = vendor;
     }
 
-    public Object[] getCompanyBasedStockImpl()
-    {
-        return new Object[]{sNO,company,name,totalQuantity,expiry,batchNo,category,vendor};
+    public Object[] getCompanyBasedStockImpl() {
+        return new Object[]{sNO, company, name, totalQuantity, expiry, batchNo, category, vendor};
     }
 
     public int getsNO() {
