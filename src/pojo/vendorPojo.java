@@ -1,6 +1,6 @@
 package pojo;
 
-import com.mysql.cj.jdbc.ha.BestResponseTimeBalanceStrategy;
+//import com.mysql.cj.jdbc.ha.BestResponseTimeBalanceStrategy;
 
 public class vendorPojo {
     String name;

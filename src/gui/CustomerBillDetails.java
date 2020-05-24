@@ -1,6 +1,6 @@
 package gui;
 
-import com.mysql.cj.log.Log;
+//import com.mysql.cj.log.Log;
 import dao.billDao;
 import pojo.billPojo;
 
