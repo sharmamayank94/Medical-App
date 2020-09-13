@@ -1,7 +1,7 @@
 package gui;
 
-import Pojo.ViewStockPojo;
-import dao.DBconnection;
+import dbutil.DBConnection;
+import pojo.ViewStockPojo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -236,7 +236,7 @@ public class CompleteStock {
 
         List<ViewStockPojo> viewStockBeans = new ArrayList<>();
         try {
-            Statement st = DBconnection.getConnection().createStatement();
+            Statement st = DBConnection.getConnection().createStatement();
             String query = "select \n" +
                     "                Name,\n" +
                     "                Category,\n" +

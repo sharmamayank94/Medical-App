@@ -7,14 +7,18 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="mysql-connector-java" level="project" />
-    <orderEntry type="library" name="zxing-j2se-1.7" level="project" />
-    <orderEntry type="library" name="zxing-core-1.7" level="project" />
-    <orderEntry type="library" name="qrgen-1.4" level="project" />
-    <orderEntry type="library" name="qrgen-1.4" level="project" />
-    <orderEntry type="library" name="qrgen-1.4" level="project" />
-    <orderEntry type="library" name="core-3.0.0" level="project" />
-    <orderEntry type="library" name="javase-3.0.0" level="project" />
-    <orderEntry type="library" name="qrgen-1.4" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.18.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="qrgen-1.4 (2)" level="project" />
+    <orderEntry type="library" name="javase-3.0.0 (2)" level="project" />
+    <orderEntry type="library" name="core-3.0.0 (2)" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-8.0.18" level="project" />
   </component>
 </module>

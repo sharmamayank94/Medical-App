@@ -1,9 +1,8 @@
 package gui;
 
-import Pojo.CompanyBasedStockPojo;
 import Utility.Barcode;
-import dao.DBconnection;
-
+import pojo.CompanyBasedStockPojo;
+import dbutil.DBConnection;
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -21,6 +20,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class CompanyBasedStock {
     private JTable table;
     private JPanel topPanel;
@@ -33,6 +34,7 @@ public class CompanyBasedStock {
     private JComboBox comboBox;
     private JTextField searchTab;
     private JButton completeStockButton;
+    private static JFrame frame;
 
     public void resizeImage(JLabel label, String imagePath, int wid, int ht) {
         ImageIcon img = new ImageIcon(imagePath);
@@ -212,13 +214,16 @@ public class CompanyBasedStock {
         completeStockButton.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+                CompleteStock cs = new CompleteStock();
+//                cs.make();
+//                frame.dispose();
 
             }
         });
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame(" My Stock");
+        frame = new JFrame(" My Stock");
         frame.setContentPane(new CompanyBasedStock().topPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -226,6 +231,7 @@ public class CompanyBasedStock {
         frame.setVisible(true);
 
     }
+
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
@@ -240,7 +246,7 @@ public class CompanyBasedStock {
 
         //table.setMaximumSize();
         table.setAutoResizeMode(4);
-        System.out.println(table.getAutoResizeMode());
+//        System.out.println(table.getAutoResizeMode());
         table.setModel(tableModel());
         Font font = new Font(null, Font.BOLD, 14);
         table.getTableHeader().setFont(font);
@@ -261,7 +267,7 @@ public class CompanyBasedStock {
 
         List<CompanyBasedStockPojo> companyBasedStocks = new ArrayList<>();
         try {
-            Statement st = DBconnection.getConnection().createStatement();
+            Statement st = DBConnection.getConnection().createStatement();
             String query = "select Name,Company ,Category,Total_Quantity,Expiry,Batch_NO ,Vendor from Medicine";
             ResultSet rs = st.executeQuery(query);
             int sNo = 0;
@@ -319,7 +325,7 @@ public class CompanyBasedStock {
                     return tableModel();
 
             }
-            PreparedStatement st = DBconnection.getConnection().prepareStatement(query);
+            PreparedStatement st = DBConnection.getConnection().prepareStatement(query);
 //            st.setString(1,comboBoxSelectedItem);
             st.setString(1, "%" + textBox + "%");
             ResultSet rs = st.executeQuery();
@@ -339,6 +345,11 @@ public class CompanyBasedStock {
         }
         return model;
     }
-
+//    public void make() {
+//        frame = new JFrame("Company Based Stock");
+//        frame.setContentPane(this.topPanel);
+//        frame.setVisible(true);
+//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//    }
 
 }
